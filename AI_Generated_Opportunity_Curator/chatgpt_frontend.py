@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-st.title("ChatGPT Chatbot (OpenAI)")
+st.title("Opportunity Curator Chatbot (Llama2 Model)")
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = []
@@ -14,7 +14,7 @@ if st.button("Send") and user_input:
         response = requests.post(
             "http://localhost:8000/chat",
             json={"message": user_input},
-            timeout=30
+            timeout=120
         )
         data = response.json()
         bot_reply = data.get("response") or data.get("error", "No response")
@@ -27,4 +27,4 @@ for role, msg in st.session_state["messages"]:
     if role == "user":
         st.markdown(f"**You:** {msg}")
     else:
-        st.markdown(f"**ChatGPT:** {msg}") 
+        st.markdown(f"**Llama2:** {msg}") 
