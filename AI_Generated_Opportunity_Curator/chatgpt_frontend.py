@@ -85,7 +85,7 @@ if st.session_state["user_mode"] == "Student":
             try:
                 # Create system prompt with combined user profile and resume context
                 system_prompt = f"System: You are an opportunity curator. Use this user profile and resume information to provide personalized recommendations: {st.session_state['user_profile_text']}\n\nUser: {user_input}"
-                
+
                 response = requests.post(
                     "http://localhost:8000/chat",
                     json={"message": system_prompt},
