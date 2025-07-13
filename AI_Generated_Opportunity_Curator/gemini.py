@@ -1,3 +1,4 @@
+# Not part of the app - just a simple api call to show how easy it is to ask Gemini from code
 from google import genai
 
 client = genai.Client()
