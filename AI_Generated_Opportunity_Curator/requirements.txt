@@ -2,3 +2,6 @@ fastapi
 uvicorn
 streamlit
 google
+sentence-transformers
+faiss-cpu
+numpy

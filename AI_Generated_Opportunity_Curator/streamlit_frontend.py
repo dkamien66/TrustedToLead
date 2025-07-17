@@ -87,7 +87,7 @@ if st.session_state["user_mode"] == "Student":
                     "http://localhost:8000/chat",
                     json={
                         "message": user_input,
-                        "system_prompt": f"You are an opportunity curator that gives specfic opportunity recommendations only from this wensite https://business.wisc.edu/undergraduate/careers/pathways/. Use this user profile and resume information to provide a 200 word length response of a list of 8 opportunities: {st.session_state['user_profile_text']}"
+                        "system_prompt": f"You are an opportunity curator that gives specfic opportunity recommendations based on the context and retrieved events, so you must include all of the information of the event (the title, type, dates, description, related business majors, and leadership skills developed). Use this user profile and resume information to provide a supportive, friendly response of 2 recommendations and what they can do to prepare: {st.session_state['user_profile_text']} "
                     },
                     timeout=180
                 )
@@ -106,7 +106,7 @@ if st.session_state["user_mode"] == "Student":
 
     # Tab 3: Network Curator
     with tab3:
-        st.title("Network Curator Chatbot (GeminiModel)")
+        st.title("Network Curator Chatbot (Gemini Model)")
         
         # Show profile context if available
         if st.session_state["user_profile_text"]:
@@ -122,7 +122,7 @@ if st.session_state["user_mode"] == "Student":
                     "http://localhost:8000/chat",
                     json={
                         "message": network_input,
-                        "system_prompt": f"You are a network curator that gives recommendations of specific people to connect with from this website https://business.wisc.edu/undergraduate/careers/pathways/. Use this user profile and resume information to provide a 200 word length of a list of people to talk to: {st.session_state['user_profile_text']}"
+                        "system_prompt": f"You are a network curator that gives recommendations of specific people to connect with according to the given context. Use this user profile and resume information to provide a few people to talk to: {st.session_state['user_profile_text']}"
                     },
                     timeout=180
                 )

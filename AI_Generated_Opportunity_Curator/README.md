@@ -37,3 +37,10 @@ This should open a new window
 
 - Open the Streamlit app in your browser (usually at http://localhost:8501)
 - Type a message and chat with Llama2!
+
+So... here are some notes to help me understand the tech stack of RAG.
+
+1. 'Embed" the events, converting them into vectors, using a sentence embedding model (sentence-transformers). Store in memory or a vector database
+2. Add a retrieval endpoint in backend to load and embed the data at start of app, embed the user's query and retrieve the most relevant events using vector similarity. Pass retrieved events as context and user's question to Gemini for text generation of response!
+3. Model processes event texts in tokens and outputs a list of numbers that represent the meaning. Similar events have similar numbers in list output.
+4. Using a vector index through faiss, using RAM memory for storage
