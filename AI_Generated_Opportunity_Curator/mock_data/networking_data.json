@@ -1,0 +1,703 @@
+
+[
+  {
+    "name": "Vallabh Sambamurthy",
+    "role": "Albert O. Nicholas Dean",
+    "related-fields": [
+      "Business Strategy",
+      "Digital Transformation",
+      "Innovation"
+    ],
+    "leadership-counseling": [
+      "Strategic Leadership",
+      "Driving Innovation",
+      "Organizational Change"
+    ]
+  },
+  {
+    "name": "Nicholas C Petruzzi",
+    "role": "Senior Associate Dean for Faculty and Staff",
+    "related-fields": [
+      "Supply Chain Management",
+      "Operations Management",
+      "Inventory Management"
+    ],
+    "leadership-counseling": [
+      "Academic Leadership",
+      "Faculty Development",
+      "Operational Excellence"
+    ]
+  },
+  {
+    "name": "Daniel Bauer",
+    "role": "Senior Associate Dean for Programs",
+    "related-fields": [
+      "Actuarial Science",
+      "Risk Management",
+      "Insurance"
+    ],
+    "leadership-counseling": [
+      "Program Development",
+      "Risk Assessment",
+      "Financial Acumen"
+    ]
+  },
+  {
+    "name": "Joann Peck",
+    "role": "Associate Dean for Learning Success and Assessment",
+    "related-fields": [
+      "Marketing",
+      "Consumer Behavior",
+      "Haptics"
+    ],
+    "leadership-counseling": [
+      "Educational Leadership",
+      "Student Assessment",
+      "Marketing Strategy"
+    ]
+  },
+  {
+    "name": "Brian W Mayhew",
+    "role": "Associate Dean for Online Innovation",
+    "related-fields": [
+      "Accounting",
+      "Auditing",
+      "Financial Reporting"
+    ],
+    "leadership-counseling": [
+      "Online Education Strategy",
+      "Digital Learning",
+      "Financial Oversight"
+    ]
+  },
+  {
+    "name": "Page Moreau",
+    "role": "Associate Dean for Research",
+    "related-fields": [
+      "Marketing",
+      "Creativity",
+      "Innovation"
+    ],
+    "leadership-counseling": [
+      "Research Leadership",
+      "Fostering Creativity",
+      "New Product Development"
+    ]
+  },
+  {
+    "name": "Stacy Tolomeo",
+    "role": "Director, Business Career Center",
+    "related-fields": [
+      "Career Services",
+      "Employer Relations",
+      "Student Development"
+    ],
+    "leadership-counseling": [
+      "Career Strategy",
+      "Networking Skills",
+      "Personal Branding"
+    ]
+  },
+  {
+    "name": "Jennifer Vrobel",
+    "role": "Assistant Director, Business Career Center",
+    "related-fields": [
+      "Career Counseling",
+      "Student Advising",
+      "Recruitment"
+    ],
+    "leadership-counseling": [
+      "Interview Preparation",
+      "Resume Building",
+      "Job Search Strategies"
+    ]
+  },
+  {
+    "name": "Grace Dunn",
+    "role": "Senior Career & Industry Advisor",
+    "related-fields": [
+      "Career Advising",
+      "Industry Relations",
+      "Student Coaching"
+    ],
+    "leadership-counseling": [
+      "Industry-Specific Career Guidance",
+      "Professional Development",
+      "Networking Strategies"
+    ]
+  },
+  {
+    "name": "Connie Knoll",
+    "role": "Recruiting and Operations Coordinator",
+    "related-fields": [
+      "Recruitment",
+      "Operations",
+      "Employer Engagement"
+    ],
+    "leadership-counseling": [
+      "Recruitment Process Management",
+      "Event Coordination",
+      "Building Employer Partnerships"
+    ]
+  },
+  {
+    "name": "Jean Sink",
+    "role": "Career Coach",
+    "related-fields": [
+      "Career Coaching",
+      "Executive Coaching",
+      "Leadership Development"
+    ],
+    "leadership-counseling": [
+      "Personal Branding",
+      "Career Transition",
+      "Leadership Presence"
+    ]
+  },
+  {
+    "name": "Fabio Gaertner",
+    "role": "Associate Professor of Accounting and Information Systems",
+    "related-fields": [
+      "Accounting",
+      "Taxation",
+      "Corporate Finance"
+    ],
+    "leadership-counseling": [
+      "Financial Literacy for Leaders",
+      "Ethical Decision Making",
+      "Corporate Governance"
+    ]
+  },
+  {
+    "name": "Mahka Moeen",
+    "role": "Associate Professor of Management and Human Resources",
+    "related-fields": [
+      "Entrepreneurship",
+      "Strategy",
+      "Innovation"
+    ],
+    "leadership-counseling": [
+      "Entrepreneurial Mindset",
+      "Strategic Thinking",
+      "New Venture Creation"
+    ]
+  },
+  {
+    "name": "Chia-Jung Tsay",
+    "role": "Associate Professor of Management and Human Resources",
+    "related-fields": [
+      "Negotiation",
+      "Decision Making",
+      "Organizational Behavior"
+    ],
+    "leadership-counseling": [
+      "Negotiation and Conflict Resolution",
+      "Effective Decision Making",
+      "Interpersonal Dynamics"
+    ]
+  },
+  {
+    "name": "Andrew DeGuire",
+    "role": "James H. Keyes Dean of Business Administration",
+    "related-fields": [
+      "Business Administration",
+      "Strategic Management",
+      "Leadership"
+    ],
+    "leadership-counseling": [
+      "Visionary Leadership",
+      "Strategic Planning",
+      "Stakeholder Management"
+    ]
+  },
+  {
+    "name": "Gary A. Adams",
+    "role": "Professor of Management",
+    "related-fields": [
+      "Management",
+      "Organizational Behavior",
+      "Human Resources"
+    ],
+    "leadership-counseling": [
+      "Team Leadership",
+      "Employee Motivation",
+      "Managing Workplace Diversity"
+    ]
+  },
+  {
+    "name": "Marko Bastl",
+    "role": "Director of the Center for Supply Chain Management",
+    "related-fields": [
+      "Supply Chain Management",
+      "Logistics",
+      "Operations Management"
+    ],
+    "leadership-counseling": [
+      "Supply Chain Strategy",
+      "Logistics and Distribution Management",
+      "Process Improvement"
+    ]
+  },
+  {
+    "name": "Belle Rose Ragins",
+    "role": "Professor of Management",
+    "related-fields": [
+      "Mentoring",
+      "Diversity and Inclusion",
+      "Organizational Behavior"
+    ],
+    "leadership-counseling": [
+      "Mentorship Program Development",
+      "Inclusive Leadership",
+      "Cross-Cultural Communication"
+    ]
+  },
+  {
+    "name": "Timothy L. Smunt",
+    "role": "Professor of Operations Management",
+    "related-fields": [
+      "Operations Management",
+      "Service Management",
+      "Technology Management"
+    ],
+    "leadership-counseling": [
+      "Lean Operations",
+      "Service Excellence",
+      "Technology Implementation Strategy"
+    ]
+  },
+  {
+    "name": "Ehsan S. Soofi",
+    "role": "Professor of Decision Sciences",
+    "related-fields": [
+      "Decision Sciences",
+      "Statistics",
+      "Information Theory"
+    ],
+    "leadership-counseling": [
+      "Data-Driven Decision Making",
+      "Risk Analysis",
+      "Problem Solving"
+    ]
+  },
+  {
+    "name": "Jon Eckhardt",
+    "role": "Professor and Researcher in Entrepreneurship",
+    "related-fields": [
+      "Entrepreneurship",
+      "Venture Capital",
+      "Technology Commercialization"
+    ],
+    "leadership-counseling": [
+      "Fostering an Entrepreneurial Culture",
+      "Securing Venture Funding",
+      "University-Industry Collaboration"
+    ]
+  },
+  {
+    "name": "Blair Nelson Sanford",
+    "role": "Associate Dean, MBA & Master's Programs",
+    "related-fields": [
+      "Higher Education Administration",
+      "Program Management",
+      "Student Affairs"
+    ],
+    "leadership-counseling": [
+      "Graduate Program Leadership",
+      "Student Engagement",
+      "Curriculum Development"
+    ]
+  },
+  {
+    "name": "Jon Kaupla",
+    "role": "Executive Director, Center for Professional & Executive Development",
+    "related-fields": [
+      "Executive Education",
+      "Leadership Development",
+      "Corporate Training"
+    ],
+    "leadership-counseling": [
+      "Executive Presence",
+      "Strategic Talent Management",
+      "Continuing Professional Development"
+    ]
+  },
+  {
+    "name": "Tom Linsmeier",
+    "role": "Thomas G. Ragatz Accounting and Law Distinguished Chair",
+    "related-fields": [
+      "Accounting Standards",
+      "Financial Reporting",
+      "SEC Regulations"
+    ],
+    "leadership-counseling": [
+      "Understanding Financial Statements",
+      "Corporate Transparency",
+      "Regulatory Compliance"
+    ]
+  },
+  {
+    "name": "Russ Coff",
+    "role": "Thomas J. Falk Distinguished Chair in Business",
+    "related-fields": [
+      "Strategic Management",
+      "Knowledge-Based Assets",
+      "Competitive Advantage"
+    ],
+    "leadership-counseling": [
+      "Competitive Strategy",
+      "Intellectual Property Management",
+      "Strategic Alliances"
+    ]
+  },
+  {
+    "name": "Jordan Tong",
+    "role": "Wisconsin Naming Partners Professor",
+    "related-fields": [
+      "Operations and Information Management",
+      "Healthcare Operations",
+      "Data Analytics"
+    ],
+    "leadership-counseling": [
+      "Operations Strategy in Healthcare",
+      "Business Process Reengineering",
+      "Analytics for Decision Making"
+    ]
+  },
+  {
+    "name": "Justin R Sydnor",
+    "role": "American Family Insurance Distinguished Chair in Risk Management and Insurance",
+    "related-fields": [
+      "Risk and Insurance",
+      "Behavioral Economics",
+      "Decision Making under Uncertainty"
+    ],
+    "leadership-counseling": [
+      "Corporate Risk Strategy",
+      "Behavioral Insights for Leaders",
+      "Managing Uncertainty"
+    ]
+  },
+  {
+    "name": "Alan Stoffer",
+    "role": "Director, Marketing Leadership Institute",
+    "related-fields": [
+      "Marketing",
+      "Brand Management",
+      "Leadership"
+    ],
+    "leadership-counseling": [
+      "Marketing Leadership",
+      "Building Strong Brands",
+      "Developing Marketing Talent"
+    ]
+  },
+  {
+    "name": "Barb Bolens",
+    "role": "Director, Nicholas Center for Corporate Finance and Investment Banking",
+    "related-fields": [
+      "Corporate Finance",
+      "Investment Banking",
+      "Mergers and Acquisitions"
+    ],
+    "leadership-counseling": [
+      "Financial Strategy",
+      "M&A Integration",
+      "Capital Budgeting"
+    ]
+  },
+  {
+    "name": "Sarah Marty",
+    "role": "Director, Bolz Center for Arts Administration",
+    "related-fields": [
+      "Arts Administration",
+      "Nonprofit Management",
+      "Creative Industries"
+    ],
+    "leadership-counseling": [
+      "Leading Arts and Culture Organizations",
+      "Fundraising and Development",
+      "Community Engagement"
+    ]
+  },
+  {
+    "name": "Dan Olszewski",
+    "role": "Director, Weinert Center for Entrepreneurship",
+    "related-fields": [
+      "Entrepreneurship",
+      "Venture Creation",
+      "Business Planning"
+    ],
+    "leadership-counseling": [
+      "Startup Leadership",
+      "Business Model Innovation",
+      "Pitching to Investors"
+    ]
+  },
+  {
+    "name": "Mark Fedenia",
+    "role": "Director, Hawk Center for Investment Analysis",
+    "related-fields": [
+      "Investment Analysis",
+      "Portfolio Management",
+      "Financial Markets"
+    ],
+    "leadership-counseling": [
+      "Investment Decision Making",
+      "Asset Allocation Strategies",
+      "Financial Market Analysis"
+    ]
+  },
+  {
+    "name": "Jake Dean",
+    "role": "Director, Grainger Center for Supply Chain Management",
+    "related-fields": [
+      "Supply Chain Management",
+      "Logistics",
+      "Global Operations"
+    ],
+    "leadership-counseling": [
+      "Global Supply Chain Leadership",
+      "Sourcing and Procurement Strategies",
+      "Inventory Control"
+    ]
+  },
+  {
+    "name": "Tanya Hubanks",
+    "role": "Director, Strategic Human Resource Management Center",
+    "related-fields": [
+      "Human Resource Management",
+      "Talent Management",
+      "Organizational Development"
+    ],
+    "leadership-counseling": [
+      "Strategic HR Leadership",
+      "Employee Relations",
+      "Change Management"
+    ]
+  },
+  {
+    "name": "David Dwight",
+    "role": "Director, Erdman Center for Operations & Technology Management",
+    "related-fields": [
+      "Operations Management",
+      "Technology Management",
+      "Process Improvement"
+    ],
+    "leadership-counseling": [
+      "Operations Excellence",
+      "Managing Technological Innovation",
+      "Project Management"
+    ]
+  },
+  {
+    "name": "Jim Franzone",
+    "role": "Associate Dean, Undergraduate Program Office",
+    "related-fields": [
+      "Undergraduate Education",
+      "Student Advising",
+      "Academic Affairs"
+    ],
+    "leadership-counseling": [
+      "Student Leadership Development",
+      "Academic Program Administration",
+      "Mentoring Undergraduates"
+    ]
+  },
+  {
+    "name": "Kaylene Reilly Christnovich",
+    "role": "Chief Operating Officer",
+    "related-fields": [
+      "Operations",
+      "Administration",
+      "Strategic Planning"
+    ],
+    "leadership-counseling": [
+      "Operational Leadership",
+      "Budget Management",
+      "Strategic Execution"
+    ]
+  },
+  {
+    "name": "Jonathan Wolf",
+    "role": "Chief Financial Officer",
+    "related-fields": [
+      "Finance",
+      "Accounting",
+      "Financial Planning"
+    ],
+    "leadership-counseling": [
+      "Financial Leadership",
+      "Risk Management",
+      "Fiscal Responsibility"
+    ]
+  },
+  {
+    "name": "Chelsea M Daley",
+    "role": "Chief of Staff",
+    "related-fields": [
+      "Administration",
+      "Project Management",
+      "Communications"
+    ],
+    "leadership-counseling": [
+      "Executive Support",
+      "Strategic Initiatives",
+      "Effective Communication"
+    ]
+  },
+  {
+    "name": "Typhaine Morrison",
+    "role": "Chief Marketing Officer",
+    "related-fields": [
+      "Marketing",
+      "Brand Strategy",
+      "Digital Marketing"
+    ],
+    "leadership-counseling": [
+      "Marketing and Brand Leadership",
+      "Data-driven Marketing Strategy",
+      "Team Leadership"
+    ]
+  },
+  {
+    "name": "Beth Anderson",
+    "role": "Chief Human Resources Officer",
+    "related-fields": [
+      "Human Resources",
+      "Talent Acquisition",
+      "Employee Engagement"
+    ],
+    "leadership-counseling": [
+      "Human Resources Strategy",
+      "Building a Positive Work Culture",
+      "Talent Development"
+    ]
+  },
+  {
+    "name": "Wendy A Fritz",
+    "role": "Associate Dean for Alumni Relations",
+    "related-fields": [
+      "Alumni Relations",
+      "Fundraising",
+      "Community Engagement"
+    ],
+    "leadership-counseling": [
+      "Building Alumni Networks",
+      "Philanthropic Leadership",
+      "Stakeholder Engagement"
+    ]
+  },
+  {
+    "name": "Bennett Cole",
+    "role": "Chief Information Officer",
+    "related-fields": [
+      "Information Technology",
+      "Cybersecurity",
+      "Data Management"
+    ],
+    "leadership-counseling": [
+      "IT Leadership and Strategy",
+      "Managing Tech Teams",
+      "Digital Security"
+    ]
+  },
+  {
+    "name": "Michael Johnson",
+    "role": "Department Chair, Marketing",
+    "related-fields": [
+      "Marketing Strategy",
+      "Consumer Insights",
+      "Product Management"
+    ],
+    "leadership-counseling": [
+      "Leading Marketing Teams",
+      "Developing Market-Oriented Strategies",
+      "Fostering a Customer-Centric Culture"
+    ]
+  },
+  {
+    "name": "Hengjie Ai",
+    "role": "Department Chair, Finance, Investment, and Banking",
+    "related-fields": [
+      "Finance",
+      "Asset Pricing",
+      "Macroeconomics"
+    ],
+    "leadership-counseling": [
+      "Financial Modeling and Analysis",
+      "Investment Strategy",
+      "Understanding Economic Indicators"
+    ]
+  },
+  {
+    "name": "Yongheng Deng",
+    "role": "Department Chair, Real Estate and Urban Land Economics",
+    "related-fields": [
+      "Real Estate",
+      "Urban Economics",
+      "Housing Finance"
+    ],
+    "leadership-counseling": [
+      "Real Estate Development Strategy",
+      "Urban Planning and Policy",
+      "Real Estate Investment Analysis"
+    ]
+  },
+  {
+    "name": "Jessica Franson",
+    "role": "Academic Advisor",
+    "related-fields": [
+      "Academic Advising",
+      "Student Success",
+      "Career Exploration"
+    ],
+    "leadership-counseling": [
+      "Goal Setting",
+      "Academic Planning",
+      "Connecting to Campus Resources"
+    ]
+  },
+  {
+    "name": "Morgan Baranczyk-Morgan",
+    "role": "Academic Advisor & Undergraduate Student Scholarship Coordinator",
+    "related-fields": [
+      "Academic Advising",
+      "Scholarship Administration",
+      "Student Financial Aid"
+    ],
+    "leadership-counseling": [
+      "Financial Literacy",
+      "Navigating University Policies",
+      "Time Management"
+    ]
+  },
+  {
+    "name": "Laura Reidinger",
+    "role": "Academic Advisor",
+    "related-fields": [
+      "Academic Advising",
+      "Student Orientation",
+      "First-Year Experience"
+    ],
+    "leadership-counseling": [
+      "Transition to College",
+      "Study Skills",
+      "Major and Career Exploration"
+    ]
+  },
+  {
+    "name": "John Leffin",
+    "role": "Leadership and Development Coach",
+    "related-fields": [
+      "Leadership Development",
+      "Executive Coaching",
+      "Experiential Learning"
+    ],
+    "leadership-counseling": [
+      "Personal Leadership Philosophy",
+      "Team Building",
+      "Self-Awareness"
+    ]
+  }
+]
