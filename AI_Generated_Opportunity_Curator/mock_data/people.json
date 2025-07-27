@@ -1,0 +1,784 @@
+[
+    {
+        "name": "David Ramirez",
+        "role": "Leader",
+        "related_fields": [
+            "Project Management",
+            "International Business"
+        ],
+        "leadership_counseling": [
+            "Decision Making",
+            "Strategic Thinking",
+            "Coaching for Growth"
+        ],
+        "email": "david.ramirez@businessuni.edu"
+    },
+    {
+        "name": "Mia Thompson",
+        "role": "Leadership Coach",
+        "related_fields": [
+            "Human Resources",
+            "Organizational Behavior",
+            "Sustainability in Business"
+        ],
+        "leadership_counseling": [
+            "Empathy",
+            "Emotional Intelligence",
+            "Team Building",
+            "Active Listening"
+        ],
+        "email": "mia.thompson@bizschool.org"
+    },
+    {
+        "name": "Sarah Perez",
+        "role": "Faculty",
+        "related_fields": [
+            "Marketing",
+            "Digital Marketing",
+            "Business Analytics"
+        ],
+        "leadership_counseling": [
+            "Problem Solving",
+            "Innovation & Creativity",
+            "Strategic Thinking"
+        ],
+        "email": "sarah.perez@universitybiz.ac.uk"
+    },
+    {
+        "name": "Justin Coleman",
+        "role": "Career Coach",
+        "related_fields": [
+            "Human Resources",
+            "Consulting",
+            "Management"
+        ],
+        "leadership_counseling": [
+            "Effective Communication",
+            "Mentorship & Coaching",
+            "Negotiation Skills",
+            "Coaching for Growth"
+        ],
+        "email": "justin.coleman@mba.edu"
+    },
+    {
+        "name": "Liam Ross",
+        "role": "Pathway Consultant",
+        "related_fields": [
+            "Management",
+            "Strategic Management",
+            "Business Law",
+            "Information Systems"
+        ],
+        "leadership_counseling": [
+            "Adaptability",
+            "Delegation",
+            "Time Management",
+            "Strategic Thinking"
+        ],
+        "email": "liam.ross@execedu.org"
+    },
+    {
+        "name": "Isabella Watson",
+        "role": "Teacher",
+        "related_fields": [
+            "Accounting",
+            "Finance"
+        ],
+        "leadership_counseling": [
+            "Critical Thinking",
+            "Problem Solving",
+            "Accountability",
+            "Time Management"
+        ],
+        "email": "isabella.watson@globalbizschool.com"
+    },
+    {
+        "name": "Christopher Kelly",
+        "role": "Advisor",
+        "related_fields": [
+            "Economics",
+            "Finance",
+            "Real Estate"
+        ],
+        "leadership_counseling": [
+            "Decision Making",
+            "Ethical Leadership",
+            "Problem Solving"
+        ],
+        "email": "christopher.kelly@leadingedge.edu"
+    },
+    {
+        "name": "Sophia Robinson",
+        "role": "Faculty",
+        "related_fields": [
+            "Operations Management",
+            "Supply Chain Management",
+            "Business Analytics"
+        ],
+        "leadership_counseling": [
+            "Strategic Thinking",
+            "Innovation & Creativity",
+            "Problem Solving",
+            "Delegation"
+        ],
+        "email": "sophia.robinson@businessuni.edu"
+    },
+    {
+        "name": "Olivia Morgan",
+        "role": "Leader",
+        "related_fields": [
+            "Strategic Management",
+            "International Business",
+            "Leadership Studies"
+        ],
+        "leadership_counseling": [
+            "Visionary Leadership",
+            "Change Management",
+            "Inspiring Others",
+            "Cross-Cultural Competence",
+            "Strategic Thinking"
+        ],
+        "email": "olivia.morgan@bizschool.org"
+    },
+    {
+        "name": "William Evans",
+        "role": "Leadership Coach",
+        "related_fields": [
+            "Organizational Behavior",
+            "Human Resources"
+        ],
+        "leadership_counseling": [
+            "Emotional Intelligence",
+            "Empathy",
+            "Team Building",
+            "Mentorship & Coaching"
+        ],
+        "email": "william.evans@universitybiz.ac.uk"
+    },
+    {
+        "name": "Ava Henderson",
+        "role": "Career Coach",
+        "related_fields": [
+            "Management",
+            "Consulting"
+        ],
+        "leadership_counseling": [
+            "Effective Communication",
+            "Negotiation Skills",
+            "Resilience"
+        ],
+        "email": "ava.henderson@mba.edu"
+    },
+    {
+        "name": "Joseph Parker",
+        "role": "Pathway Consultant",
+        "related_fields": [
+            "Finance",
+            "Financial Technology (FinTech)"
+        ],
+        "leadership_counseling": [
+            "Critical Thinking",
+            "Problem Solving",
+            "Decision Making"
+        ],
+        "email": "joseph.parker@execedu.org"
+    },
+    {
+        "name": "Charlotte Green",
+        "role": "Teacher",
+        "related_fields": [
+            "Marketing",
+            "Digital Marketing"
+        ],
+        "leadership_counseling": [
+            "Innovation & Creativity",
+            "Effective Communication",
+            "Public Speaking"
+        ],
+        "email": "charlotte.green@globalbizschool.com"
+    },
+    {
+        "name": "Noah Patterson",
+        "role": "Advisor",
+        "related_fields": [
+            "Entrepreneurship",
+            "Sports Business"
+        ],
+        "leadership_counseling": [
+            "Strategic Thinking",
+            "Risk Management",
+            "Problem Solving"
+        ],
+        "email": "noah.patterson@leadingedge.edu"
+    },
+    {
+        "name": "Emily Cox",
+        "role": "Faculty",
+        "related_fields": [
+            "Accounting",
+            "Business Law",
+            "Taxation"
+        ],
+        "leadership_counseling": [
+            "Accountability",
+            "Ethical Leadership",
+            "Attention to Detail",
+            "Problem Solving"
+        ],
+        "email": "emily.cox@businessuni.edu"
+    },
+    {
+        "name": "Daniel Phillips",
+        "role": "Leader",
+        "related_fields": [
+            "Healthcare Management",
+            "Strategic Management",
+            "Non-profit Management"
+        ],
+        "leadership_counseling": [
+            "Change Management",
+            "Visionary Leadership",
+            "Team Building",
+            "Delegation"
+        ],
+        "email": "daniel.phillips@bizschool.org"
+    },
+    {
+        "name": "Harper Miller",
+        "role": "Leadership Coach",
+        "related_fields": [
+            "Organizational Behavior",
+            "Human Resources",
+            "Leadership Studies"
+        ],
+        "leadership_counseling": [
+            "Mentorship & Coaching",
+            "Emotional Intelligence",
+            "Active Listening",
+            "Coaching for Growth",
+            "Empathy"
+        ],
+        "email": "harper.miller@universitybiz.ac.uk"
+    },
+    {
+        "name": "Ella Bailey",
+        "role": "Career Coach",
+        "related_fields": [
+            "Human Resources",
+            "Management"
+        ],
+        "leadership_counseling": [
+            "Effective Communication",
+            "Resilience",
+            "Time Management"
+        ],
+        "email": "ella.bailey@mba.edu"
+    },
+    {
+        "name": "Samuel Torres",
+        "role": "Pathway Consultant",
+        "related_fields": [
+            "International Business",
+            "Economics",
+            "Global Markets"
+        ],
+        "leadership_counseling": [
+            "Cross-Cultural Competence",
+            "Strategic Thinking",
+            "Problem Solving"
+        ],
+        "email": "samuel.torres@execedu.org"
+    },
+    {
+        "name": "Aaliyah Reed",
+        "role": "Teacher",
+        "related_fields": [
+            "Business Analytics",
+            "Data Science for Business"
+        ],
+        "leadership_counseling": [
+            "Critical Thinking",
+            "Problem Solving",
+            "Decision Making"
+        ],
+        "email": "aaliyah.reed@globalbizschool.com"
+    },
+    {
+        "name": "Evelyn Foster",
+        "role": "Advisor",
+        "related_fields": [
+            "Entrepreneurship",
+            "Innovation Management"
+        ],
+        "leadership_counseling": [
+            "Innovation & Creativity",
+            "Strategic Thinking",
+            "Risk Management"
+        ],
+        "email": "evelyn.foster@leadingedge.edu"
+    },
+    {
+        "name": "Liam Butler",
+        "role": "Faculty",
+        "related_fields": [
+            "Finance",
+            "Financial Technology (FinTech)",
+            "Risk Management"
+        ],
+        "leadership_counseling": [
+            "Strategic Thinking",
+            "Decision Making",
+            "Problem Solving",
+            "Accountability"
+        ],
+        "email": "liam.butler@businessuni.edu"
+    },
+    {
+        "name": "Grace Russell",
+        "role": "Leader",
+        "related_fields": [
+            "Organizational Behavior",
+            "Human Resources",
+            "Leadership Studies"
+        ],
+        "leadership_counseling": [
+            "Team Building",
+            "Conflict Resolution",
+            "Change Management",
+            "Inspiring Others"
+        ],
+        "email": "grace.russell@bizschool.org"
+    },
+    {
+        "name": "Abigail Myers",
+        "role": "Leadership Coach",
+        "related_fields": [
+            "Management",
+            "Consulting"
+        ],
+        "leadership_counseling": [
+            "Mentorship & Coaching",
+            "Effective Communication",
+            "Empathy",
+            "Coaching for Growth"
+        ],
+        "email": "abigail.myers@universitybiz.ac.uk"
+    },
+    {
+        "name": "Jeffrey Morgan",
+        "role": "Career Coach",
+        "related_fields": [
+            "Entrepreneurship",
+            "Project Management"
+        ],
+        "leadership_counseling": [
+            "Visionary Leadership",
+            "Negotiation Skills",
+            "Adaptability"
+        ],
+        "email": "jeffrey.morgan@mba.edu"
+    },
+    {
+        "name": "Elizabeth Long",
+        "role": "Pathway Consultant",
+        "related_fields": [
+            "Information Systems",
+            "Business Analytics"
+        ],
+        "leadership_counseling": [
+            "Critical Thinking",
+            "Problem Solving",
+            "Decision Making"
+        ],
+        "email": "elizabeth.long@execedu.org"
+    },
+    {
+        "name": "Anthony Hughes",
+        "role": "Teacher",
+        "related_fields": [
+            "Marketing",
+            "Digital Marketing",
+            "Consumer Behavior"
+        ],
+        "leadership_counseling": [
+            "Innovation & Creativity",
+            "Public Speaking",
+            "Effective Communication"
+        ],
+        "email": "anthony.hughes@globalbizschool.com"
+    },
+    {
+        "name": "Scarlett Hill",
+        "role": "Advisor",
+        "related_fields": [
+            "Accounting",
+            "Business Law"
+        ],
+        "leadership_counseling": [
+            "Ethical Leadership",
+            "Accountability",
+            "Attention to Detail"
+        ],
+        "email": "scarlett.hill@leadingedge.edu"
+    },
+    {
+        "name": "Charles Walker",
+        "role": "Faculty",
+        "related_fields": [
+            "Strategic Management",
+            "International Business",
+            "Mergers & Acquisitions"
+        ],
+        "leadership_counseling": [
+            "Strategic Thinking",
+            "Decision Making",
+            "Cross-Cultural Competence",
+            "Change Management"
+        ],
+        "email": "charles.walker@businessuni.edu"
+    },
+    {
+        "name": "Mia Cook",
+        "role": "Leadership Coach",
+        "related_fields": [
+            "Organizational Behavior",
+            "Human Resources",
+            "Coaching"
+        ],
+        "leadership_counseling": [
+            "Emotional Intelligence",
+            "Empathy",
+            "Active Listening",
+            "Mentorship & Coaching",
+            "Coaching for Growth"
+        ],
+        "email": "mia.cook@bizschool.org"
+    },
+    {
+        "name": "Paul Lewis",
+        "role": "Career Coach",
+        "related_fields": [
+            "Management",
+            "Consulting",
+            "Career Development"
+        ],
+        "leadership_counseling": [
+            "Effective Communication",
+            "Negotiation Skills",
+            "Resilience",
+            "Problem Solving"
+        ],
+        "email": "paul.lewis@universitybiz.ac.uk"
+    },
+    {
+        "name": "Yara Barnes",
+        "role": "Pathway Consultant",
+        "related_fields": [
+            "Economics",
+            "Public Policy"
+        ],
+        "leadership_counseling": [
+            "Critical Thinking",
+            "Problem Solving",
+            "Decision Making"
+        ],
+        "email": "yara.barnes@mba.edu"
+    },
+    {
+        "name": "Grace Butler",
+        "role": "Teacher",
+        "related_fields": [
+            "Operations Management",
+            "Supply Chain Management"
+        ],
+        "leadership_counseling": [
+            "Problem Solving",
+            "Delegation",
+            "Time Management"
+        ],
+        "email": "grace.butler@execedu.org"
+    },
+    {
+        "name": "Benjamin Hoffman",
+        "role": "Advisor",
+        "related_fields": [
+            "Entrepreneurship",
+            "Start-up Ecosystems"
+        ],
+        "leadership_counseling": [
+            "Innovation & Creativity",
+            "Strategic Thinking",
+            "Risk Management"
+        ],
+        "email": "benjamin.hoffman@globalbizschool.com"
+    },
+    {
+        "name": "Charlotte Thompson",
+        "role": "Faculty",
+        "related_fields": [
+            "Marketing",
+            "Digital Marketing",
+            "Consumer Behavior"
+        ],
+        "leadership_counseling": [
+            "Innovation & Creativity",
+            "Strategic Thinking",
+            "Problem Solving"
+        ],
+        "email": "charlotte.thompson@leadingedge.edu"
+    },
+    {
+        "name": "Sarah Collins",
+        "role": "Leader",
+        "related_fields": [
+            "Finance",
+            "Strategic Management",
+            "Investment Banking"
+        ],
+        "leadership_counseling": [
+            "Strategic Thinking",
+            "Decision Making",
+            "Accountability",
+            "Visionary Leadership"
+        ],
+        "email": "sarah.collins@businessuni.edu"
+    },
+    {
+        "name": "Joshua Nelson",
+        "role": "Leadership Coach",
+        "related_fields": [
+            "Organizational Behavior",
+            "Leadership Studies"
+        ],
+        "leadership_counseling": [
+            "Team Building",
+            "Conflict Resolution",
+            "Inspiring Others",
+            "Coaching for Growth"
+        ],
+        "email": "joshua.nelson@bizschool.org"
+    },
+    {
+        "name": "Anna Roberts",
+        "role": "Career Coach",
+        "related_fields": [
+            "Human Resources",
+            "Organizational Development"
+        ],
+        "leadership_counseling": [
+            "Effective Communication",
+            "Mentorship & Coaching",
+            "Empathy"
+        ],
+        "email": "anna.roberts@universitybiz.ac.uk"
+    },
+    {
+        "name": "Joseph Rodriguez",
+        "role": "Pathway Consultant",
+        "related_fields": [
+            "Business Analytics",
+            "Information Systems",
+            "Data Science for Business"
+        ],
+        "leadership_counseling": [
+            "Critical Thinking",
+            "Problem Solving",
+            "Decision Making",
+            "Adaptability"
+        ],
+        "email": "joseph.rodriguez@mba.edu"
+    },
+    {
+        "name": "Julia Turner",
+        "role": "Teacher",
+        "related_fields": [
+            "Accounting",
+            "Financial Reporting"
+        ],
+        "leadership_counseling": [
+            "Accountability",
+            "Ethical Leadership",
+            "Attention to Detail"
+        ],
+        "email": "julia.turner@execedu.org"
+    },
+    {
+        "name": "David Rivera",
+        "role": "Advisor",
+        "related_fields": [
+            "Real Estate",
+            "Urban Planning"
+        ],
+        "leadership_counseling": [
+            "Negotiation Skills",
+            "Problem Solving",
+            "Strategic Thinking"
+        ],
+        "email": "david.rivera@globalbizschool.com"
+    },
+    {
+        "name": "Chloe Phillips",
+        "role": "Faculty",
+        "related_fields": [
+            "Human Resources",
+            "Organizational Behavior",
+            "Change Management"
+        ],
+        "leadership_counseling": [
+            "Change Management",
+            "Team Building",
+            "Emotional Intelligence",
+            "Conflict Resolution"
+        ],
+        "email": "chloe.phillips@leadingedge.edu"
+    },
+    {
+        "name": "James Perry",
+        "role": "Leader",
+        "related_fields": [
+            "Entrepreneurship",
+            "Innovation & Technology",
+            "Venture Capital"
+        ],
+        "leadership_counseling": [
+            "Visionary Leadership",
+            "Innovation & Creativity",
+            "Strategic Thinking",
+            "Risk Management"
+        ],
+        "email": "james.perry@businessuni.edu"
+    },
+    {
+        "name": "Mila Peterson",
+        "role": "Leadership Coach",
+        "related_fields": [
+            "Management",
+            "Leadership Studies"
+        ],
+        "leadership_counseling": [
+            "Mentorship & Coaching",
+            "Effective Communication",
+            "Public Speaking",
+            "Inspiring Others"
+        ],
+        "email": "mila.peterson@bizschool.org"
+    },
+    {
+        "name": "Liam Scott",
+        "role": "Career Coach",
+        "related_fields": [
+            "Marketing",
+            "Sales"
+        ],
+        "leadership_counseling": [
+            "Negotiation Skills",
+            "Effective Communication",
+            "Resilience"
+        ],
+        "email": "liam.scott@universitybiz.ac.uk"
+    },
+    {
+        "name": "Daniel Coleman",
+        "role": "Pathway Consultant",
+        "related_fields": [
+            "International Business",
+            "Global Supply Chains"
+        ],
+        "leadership_counseling": [
+            "Cross-Cultural Competence",
+            "Strategic Thinking",
+            "Problem Solving"
+        ],
+        "email": "daniel.coleman@mba.edu"
+    },
+    {
+        "name": "Emily Powell",
+        "role": "Teacher",
+        "related_fields": [
+            "Finance",
+            "Corporate Finance"
+        ],
+        "leadership_counseling": [
+            "Decision Making",
+            "Critical Thinking",
+            "Problem Solving"
+        ],
+        "email": "emily.powell@execedu.org"
+    },
+    {
+        "name": "Joshua Bell",
+        "role": "Advisor",
+        "related_fields": [
+            "Healthcare Management",
+            "Public Health Policy"
+        ],
+        "leadership_counseling": [
+            "Ethical Leadership",
+            "Problem Solving",
+            "Strategic Thinking"
+        ],
+        "email": "joshua.bell@globalbizschool.com"
+    },
+    {
+        "name": "Olivia Ramirez",
+        "role": "Faculty",
+        "related_fields": [
+            "Business Analytics",
+            "Operations Management",
+            "Supply Chain Management"
+        ],
+        "leadership_counseling": [
+            "Problem Solving",
+            "Strategic Thinking",
+            "Decision Making",
+            "Data-driven Leadership"
+        ],
+        "email": "olivia.ramirez@leadingedge.edu"
+    },
+    {
+        "name": "David Anderson",
+        "role": "Leader",
+        "related_fields": [
+            "Strategic Management",
+            "Global Business",
+            "Mergers & Acquisitions"
+        ],
+        "leadership_counseling": [
+            "Visionary Leadership",
+            "Change Management",
+            "Strategic Thinking",
+            "Cross-Cultural Competence"
+        ],
+        "email": "david.anderson@businessuni.edu"
+    },
+    {
+        "name": "Tina Hill",
+        "role": "Leadership Coach",
+        "related_fields": [
+            "Organizational Behavior",
+            "Leadership Development"
+        ],
+        "leadership_counseling": [
+            "Emotional Intelligence",
+            "Empathy",
+            "Active Listening",
+            "Coaching for Growth",
+            "Resilience"
+        ],
+        "email": "tina.hill@bizschool.org"
+    },
+    {
+        "name": "Mark Henderson",
+        "role": "Career Coach",
+        "related_fields": [
+            "Human Resources",
+            "Talent Acquisition"
+        ],
+        "leadership_counseling": [
+            "Effective Communication",
+            "Mentorship & Coaching",
+            "Negotiation Skills"
+        ],
+        "email": "mark.henderson@universitybiz.ac.uk"
+    }
+]
