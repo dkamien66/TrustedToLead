@@ -1,0 +1,164 @@
+/* Custom Bootstrap overrides for UW-Madison theme */
+
+/* Primary buttons and links */
+:root {
+  --uw-red: #C5050C;
+  --uw-red-light: #E64A4A; /* Lighter red for hover states */
+  --uw-red-dark: #9B0409;  /* Darker red for active states */
+}
+
+.btn-primary, 
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:focus-visible {
+  background-color: var(--uw-red) !important;
+  border-color: var(--uw-red) !important;
+  color: white !important;
+  box-shadow: 0 0 0 0.2rem rgba(197, 5, 12, 0.25) !important;
+  outline: none !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--uw-red-light) !important;
+  border-color: var(--uw-red-light) !important;
+}
+
+.btn-outline-primary {
+  color: var(--uw-red) !important;
+  border-color: var(--uw-red) !important;
+  background-color: transparent !important;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active,
+.btn-outline-primary:focus-visible {
+  background-color: rgba(230, 74, 74, 0.1) !important;
+  color: var(--uw-red) !important;
+  border-color: var(--uw-red-light) !important;
+  box-shadow: 0 0 0 0.2rem rgba(197, 5, 12, 0.1) !important;
+  outline: none !important;
+}
+
+/* Nav tabs */
+.nav-tabs .nav-link {
+  color: var(--uw-black) !important;
+  border: none !important;
+  border-bottom: 3px solid transparent !important;
+  margin-right: 1rem;
+  padding: 0.5rem 0.5rem 0.8rem 0.5rem !important;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+  color: var(--uw-red) !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  border-bottom: 3px solid var(--uw-red) !important;
+  font-weight: 600;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+  color: var(--uw-red-light) !important;
+  border-bottom: 3px solid var(--uw-red-light) !important;
+}
+
+/* Form controls and focus states */
+.form-control:focus,
+.btn:focus,
+.btn:focus-visible,
+.nav-link:focus,
+.nav-link:focus-visible,
+.btn-check:focus + .btn,
+.btn:first-child:active, .btn.active, .btn.show,
+.btn.show:focus,
+.btn:active:focus,
+.btn.active:focus,
+.nav-pills .nav-link:focus,
+.nav-tabs .nav-link:focus,
+.form-check-input:focus,
+.form-select:focus {
+  border-color: var(--uw-red) !important;
+  box-shadow: 0 0 0 0.2rem rgba(197, 5, 12, 0.25) !important;
+  outline: 0 !important;
+}
+
+/* Remove blue outline on all elements */
+*:focus {
+  outline: none !important;
+}
+
+/* Custom focus styles */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--uw-red) !important;
+  outline-offset: 2px;
+}
+
+/* Alerts */
+.alert-primary {
+  background-color: rgba(197, 5, 12, 0.1) !important;
+  border-color: rgba(197, 5, 12, 0.2) !important;
+  color: var(--uw-black) !important;
+}
+
+/* Links */
+a {
+  color: var(--uw-red) !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--uw-red-light) !important;
+}
+
+/* Badges */
+.badge-primary {
+  background-color: var(--uw-red) !important;
+  color: white !important;
+}
+
+/* Cards */
+.card {
+  border: 1px solid var(--uw-gray) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.card-header {
+  background-color: var(--uw-light-gray) !important;
+  border-bottom: 1px solid var(--uw-gray) !important;
+  font-weight: 600;
+}
+
+/* Dropdowns */
+.dropdown-item:active, 
+.dropdown-item.active {
+  background-color: var(--uw-red) !important;
+  color: white !important;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--uw-light-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--uw-gray);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--uw-red);
+}
