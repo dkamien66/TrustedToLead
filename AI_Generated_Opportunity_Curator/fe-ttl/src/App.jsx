@@ -58,10 +58,10 @@ function App() {
             <Nav.Item>
               <Nav.Link eventKey="profile">Profile</Nav.Link>
             </Nav.Item>
-            <NavDropdown title="More" id="nav-dropdown-more">
-              <NavDropdown.Item eventKey="opportunity">Opportunities</NavDropdown.Item>
-              <NavDropdown.Item eventKey="network">Network</NavDropdown.Item>
-              <NavDropdown.Item eventKey="plan">Plan</NavDropdown.Item>
+            <NavDropdown title="Select Plans" id="nav-dropdown-more">
+              <NavDropdown.Item eventKey="opportunity">Discover Opportunities</NavDropdown.Item>
+              <NavDropdown.Item eventKey="network">Networking Opportunities</NavDropdown.Item>
+              <NavDropdown.Item eventKey="plan">Career Planner</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           {activeTab === "profile" && <Profile />}
