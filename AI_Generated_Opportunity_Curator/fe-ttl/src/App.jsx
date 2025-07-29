@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Container, Tab, Tabs, Alert } from 'react-bootstrap';
+import { Container, Alert, Nav, NavDropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './bootstrap-custom.css';
 import './App.css';
 
-// Import components
 import Header from './components/common/Header';
 import Profile from './components/Profile/Profile';
 import OpportunityTab from './components/Tabs/OpportunityTab';
@@ -17,16 +16,13 @@ function App() {
   const [error, setError] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Handle tab changes
   const handleTabSelect = (tab) => {
     if (tab) {
       setActiveTab(tab);
-      // Update URL without page reload
       window.history.pushState({}, '', `#${tab}`);
     }
   };
 
-  // Check URL for tab on initial load
   useEffect(() => {
     const hash = window.location.hash.substring(1);
     if (['profile', 'opportunity', 'network', 'plan'].includes(hash)) {
@@ -34,7 +30,6 @@ function App() {
     }
   }, []);
 
-  // Toggle admin mode
   const toggleAdminMode = () => {
     setIsAdmin(!isAdmin);
   };
@@ -43,7 +38,6 @@ function App() {
     <AppProvider>
       <div className="app">
         <Header isAdmin={isAdmin} toggleAdminMode={toggleAdminMode} />
-        
         <Container className="mt-4">
           {error && (
             <Alert 
@@ -55,38 +49,31 @@ function App() {
               {error}
             </Alert>
           )}
-
-          {isAdmin ? (
-            <AdminView />
-          ) : (
-            <Tabs
-              activeKey={activeTab}
-              onSelect={handleTabSelect}
-              id="main-tabs"
-              className="mb-3"
-              justify
-            >
-              <Tab eventKey="profile" title="Profile">
-                <Profile />
-              </Tab>
-              <Tab eventKey="opportunity" title="Opportunities">
-                <OpportunityTab />
-              </Tab>
-              <Tab eventKey="network" title="Network">
-                <NetworkTab />
-              </Tab>
-              <Tab eventKey="plan" title="Plan">
-                <PlanTab />
-              </Tab>
-            </Tabs>
-          )}
+          <Nav
+            variant="tabs"
+            activeKey={activeTab}
+            onSelect={handleTabSelect}
+            className="mb-3"
+          >
+            <Nav.Item>
+              <Nav.Link eventKey="profile">Profile</Nav.Link>
+            </Nav.Item>
+            <NavDropdown title="More" id="nav-dropdown-more">
+              <NavDropdown.Item eventKey="opportunity">Opportunities</NavDropdown.Item>
+              <NavDropdown.Item eventKey="network">Network</NavDropdown.Item>
+              <NavDropdown.Item eventKey="plan">Plan</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+          {activeTab === "profile" && <Profile />}
+          {activeTab === "opportunity" && <OpportunityTab />}
+          {activeTab === "network" && <NetworkTab />}
+          {activeTab === "plan" && <PlanTab />}
         </Container>
       </div>
     </AppProvider>
   );
 }
 
-// Simple admin view component
 const AdminView = () => (
   <div className="admin-view">
     <h2>Admin Dashboard</h2>
