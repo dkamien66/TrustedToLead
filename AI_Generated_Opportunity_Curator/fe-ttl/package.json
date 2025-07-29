@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://trustedtolead.github.io/ttl",
+  "homepage": "https://dkamien66.github.io/TrustedToLead",
   "description": "A React application for Trusted to Lead",
   "scripts": {
     "dev": "vite",
