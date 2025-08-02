@@ -14,6 +14,17 @@ if "user_profile_text" not in st.session_state:
 if "user_mode" not in st.session_state:
     st.session_state["user_mode"] = "Student"
 
+# --- Questionnaire specific session state ---
+# Initialize session state for questionnaire progress and score
+if "questionnaire_messages" not in st.session_state:
+    st.session_state["questionnaire_messages"] = []
+if "questionnaire_score" not in st.session_state:
+    st.session_state["questionnaire_score"] = 0
+if "questionnaire_completed" not in st.session_state:
+    st.session_state["questionnaire_completed"] = False
+if "current_question_index" not in st.session_state:
+    st.session_state["current_question_index"] = 0
+
 # Toggle button at top left
 col1, col2, col3 = st.columns([1, 3, 1])
 with col1:
@@ -27,8 +38,8 @@ with col2:
 
 # Conditional content based on mode
 if st.session_state["user_mode"] == "Student":
-    # Create tabs for Student mode
-    tab1, tab2, tab3 = st.tabs(["Profile", "Opportunity Curator", "Network Curator"])
+    # Create tabs for Student mode, including the new questionnaire tab
+    tab1, tab2, tab3, tab4 = st.tabs(["Profile", "Opportunity Curator", "Network Curator", "Leadership Questionnaire"])
 
     # Tab 1: Profile
     with tab1:
@@ -87,16 +98,17 @@ if st.session_state["user_mode"] == "Student":
                     "http://localhost:8000/chat",
                     json={
                         "message": user_input,
-                        "system_prompt": f"You are an opportunity curator that gives specfic opportunity recommendations based on the context and retrieved events, so you must include all of the information of the event (the title, type, dates, description, related business majors, and leadership skills developed). Use this user profile and resume information to provide a supportive, friendly response of 2 recommendations and what they can do to prepare: {st.session_state['user_profile_text']} "
+                        "system_prompt": f"You are an opportunity curator...",
+                        "chat_type": "events" # ADD THIS LINE
                     },
-                    timeout=180
+                timeout=180
                 )
                 data = response.json()
                 bot_reply = data.get("response") or data.get("error", "No response")
             except Exception as e:
                 bot_reply = f"Error: {e}"
             st.session_state["opportunity_messages"].append(("bot", bot_reply))
-        
+            
         # Display opportunity curator chat history
         for role, msg in st.session_state["opportunity_messages"]:
             if role == "user":
@@ -119,19 +131,20 @@ if st.session_state["user_mode"] == "Student":
             st.session_state["network_messages"].append(("user", network_input))
             try:
                 response = requests.post(
-                    "http://localhost:8000/chat",
-                    json={
-                        "message": network_input,
-                        "system_prompt": f"You are a network curator that gives recommendations of specific people to connect with according to the given context. Use this user profile and resume information to provide a few people to talk to: {st.session_state['user_profile_text']}"
-                    },
-                    timeout=180
+                "http://localhost:8000/chat",
+                json={
+                    "message": network_input,
+                    "system_prompt": f"You are a network curator...",
+                    "chat_type": "networking" 
+                },
+                timeout=180
                 )
                 data = response.json()
                 bot_reply = data.get("response") or data.get("error", "No response")
             except Exception as e:
                 bot_reply = f"Error: {e}"
             st.session_state["network_messages"].append(("bot", bot_reply))
-        
+            
         # Display network curator chat history
         for role, msg in st.session_state["network_messages"]:
             if role == "user":
@@ -139,10 +152,87 @@ if st.session_state["user_mode"] == "Student":
             else:
                 st.markdown(f"**Gemini:** {msg}")
 
-else:  # Admin mode
+    # Tab 4: Leadership Questionnaire (NEW FEATURE)
+    with tab4:
+        st.title("Leadership Self-Assessment Questionnaire")
+
+        # Define the questions and their points
+        questions = [
+            {"text": "I actively seek and apply feedback from my peers and superiors.", "points_for_yes": 3},
+            {"text": "I effectively delegate tasks to empower my team members.", "points_for_yes": 4},
+            {"text": "I take initiative to mentor and develop others.", "points_for_yes": 5},
+            {"text": "I can clearly articulate a vision and inspire others to follow it.", "points_for_yes": 5},
+            {"text": "I remain composed and make sound decisions under pressure.", "points_for_yes": 3},
+            {"text": "I foster an inclusive and collaborative environment within my team.", "points_for_yes": 4},
+            {"text": "I am proactive in identifying and addressing potential conflicts.", "points_for_yes": 3},
+            {"text": "I am adaptable and embrace change within my leadership approach.", "points_for_yes": 3},
+            {"text": "I consistently set clear goals and hold myself and others accountable.", "points_for_yes": 4},
+            {"text": "I celebrate team successes and acknowledge individual contributions.", "points_for_yes": 2}
+        ]
+
+        # Display current question or results if completed
+        if not st.session_state["questionnaire_completed"]:
+            st.subheader(f"Question {st.session_state['current_question_index'] + 1}/{len(questions)}")
+            current_question = questions[st.session_state["current_question_index"]]
+            st.write(current_question["text"])
+
+            # Buttons for Yes/No answers
+            col_q1, col_q2 = st.columns(2)
+            with col_q1:
+                if st.button("Yes", key=f"q_yes_{st.session_state['current_question_index']}"):
+                    st.session_state["questionnaire_score"] += current_question["points_for_yes"]
+                    st.session_state["current_question_index"] += 1
+                    # Check if all questions are answered
+                    if st.session_state["current_question_index"] >= len(questions):
+                        st.session_state["questionnaire_completed"] = True
+                    st.rerun() # Rerun to update UI
+            with col_q2:
+                if st.button("No", key=f"q_no_{st.session_state['current_question_index']}"):
+                    st.session_state["current_question_index"] += 1
+                    # Check if all questions are answered
+                    if st.session_state["current_question_index"] >= len(questions):
+                        st.session_state["questionnaire_completed"] = True
+                    st.rerun() # Rerun to update UI
+        else:
+            # Display score and feedback options once questionnaire is complete
+            st.success("You have completed the questionnaire!")
+            total_possible_score = sum(q["points_for_yes"] for q in questions)
+            st.subheader(f"Your Leadership Score: {st.session_state['questionnaire_score']} out of {total_possible_score}")
+
+            # Button to get personalized feedback from Gemini
+            if st.button("Get Personalized Feedback"):
+                feedback_prompt = f"A user just completed a leadership questionnaire with a score of {st.session_state['questionnaire_score']} out of {total_possible_score}. Provide encouraging and actionable feedback based on this score, suggesting general areas of strength and areas for development in leadership skills. Assume higher scores indicate more developed skills."
+                
+                try:
+                    # Send feedback request to the backend API's chat endpoint
+                    response = requests.post(
+                    "http://localhost:8000/chat",
+                    json={
+                        "message": feedback_prompt,
+                        "system_prompt": "You are an encouraging leadership coach...",
+                        "chat_type": "questionnaire" # ADD THIS LINE
+                    },
+                    timeout=600
+                )
+                    data = response.json()
+                    feedback_text = data.get("response") or data.get("error", "Could not get feedback.")
+                    st.markdown("---")
+                    st.subheader("Personalized Feedback:")
+                    st.write(feedback_text)
+                except Exception as e:
+                    st.error(f"Error getting feedback: {e}")
+            
+            # Button to restart the questionnaire
+            if st.button("Restart Questionnaire"):
+                st.session_state["questionnaire_completed"] = False
+                st.session_state["current_question_index"] = 0
+                st.session_state["questionnaire_score"] = 0
+                st.rerun() # Rerun to reset the questionnaire
+
+else: # Admin mode
     # Create single tab for Admin mode
     tab1, = st.tabs(["Input Opportunity"])
     
     with tab1:
         st.header("Input Opportunity")
-        # Empty content as requested 
+        # Empty content as requested

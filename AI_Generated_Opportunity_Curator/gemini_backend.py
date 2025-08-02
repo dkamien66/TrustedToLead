@@ -7,6 +7,13 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 import faiss
 import json
+import os
+
+api_key = os.getenv("GOOGLE_API_KEY")
+if not api_key:
+    raise RuntimeError("Missing GOOGLE_API_KEY in environment")
+
+client = genai.Client(api_key=api_key)
 
 app = FastAPI()
 
@@ -26,7 +33,7 @@ class ChatRequest(BaseModel):
 client = genai.Client()
 
 # Load and embed events at startup
-with open("mock_data/events.json") as f:
+with open("mock_data/networking_data.json") as f:
     events = json.load(f) # turns JSON file into Python dict
 
 model = SentenceTransformer("all-MiniLM-L6-v2") # load a pre-trained model that can turn sentences into embeddings (lists of numbers)
