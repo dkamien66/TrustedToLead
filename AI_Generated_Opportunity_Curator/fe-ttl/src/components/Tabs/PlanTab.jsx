@@ -1,5 +1,5 @@
 // src/components/Tabs/PlanTab.jsx
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Button, Spinner, Alert, Card, ListGroup } from 'react-bootstrap';
 import { FaPaperPlane, FaCalendarAlt, FaUserFriends } from 'react-icons/fa';
 import { chatWithBot } from '../../services/api';
@@ -20,36 +20,39 @@ const PlanTab = () => {
   const planMessages = messages.plan || [];
 
   const handleSend = async () => {
-    if (!input.trim()) return;
-    
-    // Add user message to UI immediately
-    const userMessage = { role: 'user', content: input };
-    addMessage('plan', userMessage);
-    
+    const trimmed = input.trim();
+    if (!trimmed || isLoading) return;
+
+    addMessage('plan', { id: crypto.randomUUID(), role: 'user', content: trimmed });
+
     setIsLoading(true);
     setInput('');
     setError(null);
 
     try {
-      // Include user profile in the message for context
-      const fullMessage = userProfile.text ? `${input} \n\nUser Profile: ${userProfile.text}` : input;
-      
-      const response = await chatWithBot(fullMessage, PLAN_SYSTEM_PROMPT);
-      
-      // Add bot response to UI
-      addMessage('plan', { 
-        role: 'assistant', 
-        content: response.message || 'Sorry, I couldn\'t create a plan right now.'
-      });
+      const fullMessage = userProfile?.text
+        ? `${trimmed}\n\nUser Profile: ${userProfile.text}`
+        : trimmed;
+
+      const data = await chatWithBot(fullMessage, PLAN_SYSTEM_PROMPT);
+      const text = typeof data?.response === 'string' ? data.response : '';
+
+      if (!text) throw new Error('Empty response from server');
+
+      addMessage('plan', { id: crypto.randomUUID(), role: 'assistant', content: text });
     } catch (err) {
-      console.error('Error:', err);
+      console.error('PlanTab error:', err);
       setError('Sorry, there was an error creating your plan. Please try again.');
-      addMessage('plan', { 
-        role: 'error', 
-        content: 'Sorry, there was an error processing your request.' 
-      });
+      addMessage('plan', { id: crypto.randomUUID(), role: 'error', content: "Sorry, I couldn't create a plan right now." });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
     }
   };
 
@@ -61,37 +64,24 @@ const PlanTab = () => {
             <h4>Plan Curator</h4>
             <p>Let's create a personalized plan to help you achieve your career goals!</p>
             <p>Example: "Help me create a plan to become a marketing manager"</p>
-            
             <Card className="suggestion-card mt-4">
               <Card.Header>Quick Start</Card.Header>
               <ListGroup variant="flush">
-                <ListGroup.Item 
-                  action 
-                  onClick={() => setInput("Help me create a plan to become a marketing manager")}
-                >
-                  <FaCalendarAlt className="me-2" />
-                  Marketing Career Plan
+                <ListGroup.Item action onClick={() => setInput("Help me create a plan to become a marketing manager")}>
+                  <FaCalendarAlt className="me-2" /> Marketing Career Plan
                 </ListGroup.Item>
-                <ListGroup.Item 
-                  action 
-                  onClick={() => setInput("What skills do I need for a career in finance?")}
-                >
-                  <FaUserFriends className="me-2" />
-                  Finance Career Skills
+                <ListGroup.Item action onClick={() => setInput("What skills do I need for a career in finance?")}>
+                  <FaUserFriends className="me-2" /> Finance Career Skills
                 </ListGroup.Item>
-                <ListGroup.Item 
-                  action 
-                  onClick={() => setInput("Create a semester plan for leadership development")}
-                >
-                  <FaCalendarAlt className="me-2" />
-                  Leadership Development
+                <ListGroup.Item action onClick={() => setInput("Create a semester plan for leadership development")}>
+                  <FaCalendarAlt className="me-2" /> Leadership Development
                 </ListGroup.Item>
               </ListGroup>
             </Card>
           </div>
         ) : (
-          planMessages.map((msg, index) => (
-            <Message key={index} role={msg.role} content={msg.content} />
+          planMessages.map((msg) => (
+            <Message key={msg.id ?? Math.random()} role={msg.role} content={msg.content} />
           ))
         )}
         {isLoading && (
@@ -102,27 +92,23 @@ const PlanTab = () => {
         )}
         {error && <Alert variant="danger">{error}</Alert>}
       </div>
-      
+
       <div className="input-area">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+          onKeyDown={handleKeyDown}
           placeholder="What's your career goal?"
           disabled={isLoading}
         />
-        <Button 
-          variant="primary" 
-          onClick={handleSend} 
+        <Button
+          variant="primary"
+          onClick={handleSend}
           disabled={isLoading || !input.trim()}
           className="send-button"
         >
-          {isLoading ? (
-            <Spinner animation="border" size="sm" />
-          ) : (
-            <FaPaperPlane />
-          )}
+          {isLoading ? <Spinner animation="border" size="sm" /> : <FaPaperPlane />}
         </Button>
       </div>
     </div>

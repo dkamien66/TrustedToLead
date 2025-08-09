@@ -1,11 +1,11 @@
 // src/components/Tabs/OpportunityTab.jsx
-import React, { useState, useContext } from 'react';
-import { Card, Button, Alert, Spinner } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Alert, Spinner } from 'react-bootstrap';
 import { FaPaperPlane } from 'react-icons/fa';
 import { chatWithBot } from '../../services/api';
 import { useAppContext } from '../../context/AppContext';
 import Message from '../Chat/Message';
-import "../Chat/Chat.css";
+import '../Chat/Chat.css';
 
 const OPPORTUNITY_SYSTEM_PROMPT = `You are an opportunity curator that gives specific opportunity recommendations 
 based on the context of retrieved events, so you must include all of the 
@@ -21,36 +21,43 @@ const OpportunityTab = () => {
   const opportunityMessages = messages.opportunity || [];
 
   const handleSend = async () => {
-    if (!input.trim()) return;
-    
-    // Add user message to UI immediately
-    const userMessage = { role: 'user', content: input };
-    addMessage('opportunity', userMessage);
-    
+    const trimmed = input.trim();
+    if (!trimmed || isLoading) return;
+
+    addMessage('opportunity', { id: crypto.randomUUID(), role: 'user', content: trimmed });
+
     setIsLoading(true);
     setInput('');
     setError(null);
 
     try {
-      // Include user profile in the message for context
-      const fullMessage = userProfile.text ? `${input} \n\nUser Profile: ${userProfile.text}` : input;
-      
-      const response = await chatWithBot(fullMessage, OPPORTUNITY_SYSTEM_PROMPT);
-      
-      // Add bot response to UI
-      addMessage('opportunity', { 
-        role: 'assistant', 
-        content: response.message || 'Sorry, I couldn\'t process your request.'
-      });
+      const fullMessage = userProfile?.text
+        ? `${trimmed}\n\nUser Profile: ${userProfile.text}`
+        : trimmed;
+
+      const data = await chatWithBot(fullMessage, OPPORTUNITY_SYSTEM_PROMPT);
+
+      const text = typeof data?.response === 'string' ? data.response : '';
+      if (!text) throw new Error('Empty response from server');
+
+      addMessage('opportunity', { id: crypto.randomUUID(), role: 'assistant', content: text });
     } catch (err) {
-      console.error('Error:', err);
-      setError('Sorry, there was an error processing your request. Please try again.');
-      addMessage('opportunity', { 
-        role: 'error', 
-        content: 'Sorry, there was an error processing your request.' 
+      console.error('OpportunityTab error:', err);
+      setError('Sorry, there was an error processing your request.');
+      addMessage('opportunity', {
+        id: crypto.randomUUID(),
+        role: 'error',
+        content: 'Sorry, there was an error processing your request. Please try again.'
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
     }
   };
 
@@ -64,8 +71,8 @@ const OpportunityTab = () => {
             <p>Example: "What leadership opportunities are available this semester?"</p>
           </div>
         ) : (
-          opportunityMessages.map((msg, index) => (
-            <Message key={index} role={msg.role} content={msg.content} />
+          opportunityMessages.map((msg) => (
+            <Message key={msg.id ?? Math.random()} role={msg.role} content={msg.content} />
           ))
         )}
         {isLoading && (
@@ -76,27 +83,23 @@ const OpportunityTab = () => {
         )}
         {error && <Alert variant="danger">{error}</Alert>}
       </div>
-      
+
       <div className="input-area">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+          onKeyDown={handleKeyDown}
           placeholder="Ask about opportunities..."
           disabled={isLoading}
         />
-        <Button 
-          variant="primary" 
-          onClick={handleSend} 
+        <Button
+          variant="primary"
+          onClick={handleSend}
           disabled={isLoading || !input.trim()}
           className="send-button"
         >
-          {isLoading ? (
-            <Spinner animation="border" size="sm" />
-          ) : (
-            <FaPaperPlane />
-          )}
+          {isLoading ? <Spinner animation="border" size="sm" /> : <FaPaperPlane />}
         </Button>
       </div>
     </div>

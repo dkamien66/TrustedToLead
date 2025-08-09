@@ -1,0 +1,21 @@
+# Core dependencies
+numpy
+pandas
+scikit-learn
+openai
+requests
+matplotlib
+streamlit
+
+# Backend specific
+fastapi
+uvicorn
+python-multipart
+python-jose[cryptography]
+passlib[bcrypt]
+python-dotenv
+
+# AI/ML
+google-generativeai
+sentence-transformers
+faiss-cpu  # Use faiss-gpu if you have CUDA compatible GPU

@@ -1,7 +1,7 @@
 // src/components/Tabs/NetworkTab.jsx
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Button, Spinner, Alert } from 'react-bootstrap';
-import { FaPaperPlane, FaUserTie } from 'react-icons/fa';
+import { FaPaperPlane } from 'react-icons/fa';
 import { chatWithBot } from '../../services/api';
 import { useAppContext } from '../../context/AppContext';
 import Message from '../Chat/Message';
@@ -20,36 +20,43 @@ const NetworkTab = () => {
   const networkMessages = messages.network || [];
 
   const handleSend = async () => {
-    if (!input.trim()) return;
-    
-    // Add user message to UI immediately
-    const userMessage = { role: 'user', content: input };
-    addMessage('network', userMessage);
-    
+    const trimmed = input.trim();
+    if (!trimmed || isLoading) return;
+
+    addMessage('network', { id: crypto.randomUUID(), role: 'user', content: trimmed });
+
     setIsLoading(true);
     setInput('');
     setError(null);
 
     try {
-      // Include user profile in the message for context
-      const fullMessage = userProfile.text ? `${input} \n\nUser Profile: ${userProfile.text}` : input;
-      
-      const response = await chatWithBot(fullMessage, NETWORK_SYSTEM_PROMPT);
-      
-      // Add bot response to UI
-      addMessage('network', { 
-        role: 'assistant', 
-        content: response.message || 'Sorry, I couldn\'t find any relevant connections.'
-      });
+      const fullMessage = userProfile?.text
+        ? `${trimmed}\n\nUser Profile: ${userProfile.text}`
+        : trimmed;
+
+      const data = await chatWithBot(fullMessage, NETWORK_SYSTEM_PROMPT);
+      const text = typeof data?.response === 'string' ? data.response : '';
+
+      if (!text) throw new Error('Empty response from server');
+
+      addMessage('network', { id: crypto.randomUUID(), role: 'assistant', content: text });
     } catch (err) {
-      console.error('Error:', err);
+      console.error('NetworkTab error:', err);
       setError('Sorry, there was an error finding connections. Please try again.');
-      addMessage('network', { 
-        role: 'error', 
-        content: 'Sorry, there was an error processing your request.' 
+      addMessage('network', {
+        id: crypto.randomUUID(),
+        role: 'error',
+        content: 'Sorry, there was an error processing your request.'
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
     }
   };
 
@@ -63,8 +70,8 @@ const NetworkTab = () => {
             <p>Example: "Who can I talk to about careers in marketing?"</p>
           </div>
         ) : (
-          networkMessages.map((msg, index) => (
-            <Message key={index} role={msg.role} content={msg.content} />
+          networkMessages.map((msg) => (
+            <Message key={msg.id ?? Math.random()} role={msg.role} content={msg.content} />
           ))
         )}
         {isLoading && (
@@ -75,27 +82,23 @@ const NetworkTab = () => {
         )}
         {error && <Alert variant="danger">{error}</Alert>}
       </div>
-      
+
       <div className="input-area">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+          onKeyDown={handleKeyDown}
           placeholder="Ask about networking opportunities..."
           disabled={isLoading}
         />
-        <Button 
-          variant="primary" 
-          onClick={handleSend} 
+        <Button
+          variant="primary"
+          onClick={handleSend}
           disabled={isLoading || !input.trim()}
           className="send-button"
         >
-          {isLoading ? (
-            <Spinner animation="border" size="sm" />
-          ) : (
-            <FaPaperPlane />
-          )}
+          {isLoading ? <Spinner animation="border" size="sm" /> : <FaPaperPlane />}
         </Button>
       </div>
     </div>
