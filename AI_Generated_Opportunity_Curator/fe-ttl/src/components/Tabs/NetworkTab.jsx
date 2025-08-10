@@ -1,6 +1,6 @@
 // src/components/Tabs/NetworkTab.jsx
 import React, { useState } from 'react';
-import { Card, Button, Spinner, Alert } from 'react-bootstrap';
+import { Card, Button, Spinner, Alert, Tabs, Tab } from 'react-bootstrap';
 import { FaPaperPlane } from 'react-icons/fa';
 import { chatWithBot } from '../../services/api';
 import { useAppContext } from '../../context/AppContext';
@@ -12,25 +12,25 @@ who can help them with their career goals. Provide specific recommendations for
 people to connect with, including their name, role, related fields, and how they 
 can help the user based on their profile and interests. Format fields as **Label:** Value pairs.`;
 
-/* ----------------- shared styling + helpers (no new files) ----------------- */
+/* ----------------- helpers (no new files) ----------------- */
 
-// Accent + reusable inline styles (keeps CSS in this file)
-const ACCENT = '#d92929'; // UW-ish red vibe; tweak if you like
+const ACCENT = '#d92929';
 const styles = {
-  cardShell: {
+  shell: {
     border: '1px solid rgba(0,0,0,0.08)',
     borderRadius: 16,
     boxShadow: '0 6px 18px rgba(0,0,0,0.06)',
     overflow: 'hidden',
+    marginBottom: 10
   },
-  cardBody: {
+  body: {
     padding: '14px 16px',
-    lineHeight: 1.55,
-    color: '#1f1f1f',
+    color: '#101010',
+    lineHeight: 1.55
   },
-  accentBar: {
+  accent: {
     height: 4,
-    background: `linear-gradient(90deg, ${ACCENT}, ${ACCENT}66)`,
+    background: `linear-gradient(90deg, ${ACCENT}, ${ACCENT}66)`
   },
   label: {
     fontSize: '0.78rem',
@@ -38,28 +38,15 @@ const styles = {
     letterSpacing: '.04em',
     textTransform: 'uppercase',
     color: '#6a6a6a',
-    marginBottom: 6,
+    marginBottom: 6
   },
   value: {
     lineHeight: 1.55,
     color: '#101010',
-    whiteSpace: 'pre-line',
-  },
-  grid: {
-    rowGap: '10px',
-    columnGap: '10px',
-  },
-  intro: {
-    fontSize: '0.95rem',
-    background: '#fafafa',
-    border: '1px solid rgba(0,0,0,0.06)',
-    borderRadius: 12,
-    padding: 12,
-    lineHeight: 1.55,
-  },
+    whiteSpace: 'pre-line'
+  }
 };
 
-// Labels we want to tile (order = priority)
 const KVT_LABELS = [
   'Name','Person','Contact','Role','Title','Department',
   'Related Fields','Expertise','Focus Areas',
@@ -67,7 +54,6 @@ const KVT_LABELS = [
   'Contact Tip','Suggested Message','Topics to Discuss','Notes'
 ];
 
-// cleaner (same as Opportunity tab behavior) + inline “ * ” → newline
 function cleanText(s = '') {
   return String(s)
     .replace(/\r/g, '')
@@ -75,14 +61,13 @@ function cleanText(s = '') {
     .replace(/\*\*\*/g, '')
     .replace(/\*\*/g, '')
     .replace(/(^|\s)\*(?=\s|$)/g, ' ')
-    .replace(/\s\*\s+/g, '\n')      // inline " * " → newline
+    .replace(/\s\*\s+/g, '\n')
     .replace(/^[*•>\-–—]+\s*/gm, '')
     .replace(/[ \t]+/g, ' ')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
 
-// Parse "**Label:** value" (or "Label: value") blobs → {intro, fields[]}
 function parseKeyValues(text = '') {
   const input = String(text)
     .replace(/\r/g, '')
@@ -125,60 +110,98 @@ function parseKeyValues(text = '') {
     return { label: canonical, value: cleanText(raw) };
   }).filter(Boolean);
 
-  const order = new Map(KVT_LABELS.map((k, i) => [k.toLowerCase(), i]));
-  fields.sort((a, b) => (order.get(a.label.toLowerCase()) ?? 999) - (order.get(b.label.toLowerCase()) ?? 999));
-
   return { intro, fields };
 }
 
-// If we couldn't parse label/value pairs, split the prose into nice sections
+/**
+ * Smart grouping:
+ *  - If we see consecutive Names first, create N people, then
+ *    assign subsequent fields in contiguous groups of length N (round-robin).
+ *  - Otherwise fall back to the simple “new person at each Name” approach.
+ */
+// Replace your current groupIntoPeople with this one
+function groupIntoPeople(fields) {
+  if (!fields.length) return [];
+
+  const isName = (l) => ['name','person','contact'].includes(l.toLowerCase());
+
+  // 1) Pull out all names in order → create people
+  const names = fields.filter(f => isName(f.label));
+  const people = names.length
+    ? names.map(n => ({ name: n.value, fields: [] }))
+    : [{ name: '', fields: [] }];
+
+  const n = people.length;
+
+  // 2) For everything that's NOT a name, assign by label-specific round-robin.
+  //    This handles the “columns” layout: Name A,B,C then Role x3 then Fields x3...
+  const perLabelCounts = Object.create(null);
+  for (const f of fields) {
+    if (isName(f.label)) continue;
+
+    const key = f.label.toLowerCase();
+    const i = perLabelCounts[key] ?? 0;     // how many of this label we've placed
+    const who = i % n;                      // which person gets this occurrence
+    people[who].fields.push(f);
+    perLabelCounts[key] = i + 1;
+  }
+
+  return people;
+}
+
+
 function ProseCards({ text }) {
   const chunks = cleanText(text).split(/\n\s*\n/).filter(Boolean);
   return (
     <div className="mb-2">
       {chunks.map((para, i) => (
-        <Card key={i} style={{ ...styles.cardShell, marginBottom: 8 }}>
-          <div style={styles.accentBar} />
-          <Card.Body style={styles.cardBody}>{para}</Card.Body>
+        <Card key={i} style={{ ...styles.shell, marginBottom: 8 }}>
+          <div style={styles.accent} />
+          <Card.Body style={styles.body}>{para}</Card.Body>
         </Card>
       ))}
     </div>
   );
 }
 
-// Tile renderer (same look/feel as Opportunity tab, just nicer shell)
-function AssistantTiles({ text }) {
+function AssistantPeopleTabs({ text }) {
   const { intro, fields } = parseKeyValues(text);
+  if (!fields.length) return <ProseCards text={intro || text} />;
 
-  if (fields.length === 0) {
-    // no labels detected → show well-styled prose cards
-    return <ProseCards text={intro || text} />;
-  }
+  const people = groupIntoPeople(fields);
 
   return (
     <div className="mb-2">
       {intro && (
-        <Card className="mb-2" style={styles.cardShell}>
-          <div style={styles.accentBar} />
-          <Card.Body style={{ ...styles.cardBody, background: '#fafafa' }}>
-            {intro}
-          </Card.Body>
+        <Card className="mb-2" style={styles.shell}>
+          <div style={styles.accent} />
+          <Card.Body style={{ ...styles.body, background: '#fafafa' }}>{intro}</Card.Body>
         </Card>
       )}
 
-      <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3" style={styles.grid}>
-        {fields.map((f, i) => (
-          <div className="col" key={`${f.label}-${i}`}>
-            <Card className="h-100" style={styles.cardShell}>
-              <div style={styles.accentBar} />
-              <Card.Body style={styles.cardBody}>
-                <div style={styles.label}>{f.label}</div>
-                <div style={styles.value}>{f.value}</div>
-              </Card.Body>
-            </Card>
-          </div>
-        ))}
-      </div>
+      <Card style={styles.shell}>
+        <div style={styles.accent} />
+        <Card.Body style={styles.body}>
+          <Tabs defaultActiveKey="0" id="network-people-tabs" justify>
+            {people.map((p, idx) => (
+              <Tab eventKey={String(idx)} title={p.name || `Person ${idx + 1}`} key={idx}>
+                <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-2" style={{ marginTop: 10 }}>
+                  {p.fields.map((f, i2) => (
+                    <div className="col" key={`${p.name || idx}-${f.label}-${i2}`}>
+                      <Card className="h-100" style={{ borderRadius: 14, border: '1px solid rgba(0,0,0,0.08)' }}>
+                        <Card.Body>
+                          <div style={styles.label}>{f.label}</div>
+                          <div style={styles.value}>{f.value}</div>
+                        </Card.Body>
+                      </Card>
+                    </div>
+                  ))}
+                </div>
+              </Tab>
+            ))}
+          </Tabs>
+        </Card.Body>
+      </Card>
     </div>
   );
 }
@@ -239,7 +262,7 @@ const NetworkTab = () => {
         ) : (
           networkMessages.map((msg) =>
             msg.role === 'assistant'
-              ? <AssistantTiles key={msg.id ?? Math.random()} text={msg.content} />
+              ? <AssistantPeopleTabs key={msg.id ?? Math.random()} text={msg.content} />
               : <Message key={msg.id ?? Math.random()} role={msg.role} content={msg.content} />
           )
         )}
