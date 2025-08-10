@@ -1,0 +1,40 @@
+/* src/components/Chat/MarkdownMessage.css */
+.md-message {
+    line-height: 1.55;
+    font-size: 0.95rem;
+    color: #222;
+  }
+  
+  .md-message h1,
+  .md-message h2,
+  .md-message h3 {
+    margin: 0 0 8px;
+    font-weight: 700;
+  }
+  
+  .md-message p {
+    margin: 0 0 10px;
+  }
+  
+  .md-message ul,
+  .md-message ol {
+    margin: 0 0 10px 1.25rem;
+  }
+  
+  .md-message li {
+    margin: 4px 0;
+  }
+  
+  .md-message strong {
+    font-weight: 700;
+  }
+  
+  .md-message code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.9em;
+    padding: 0.1em 0.35em;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 6px;
+    background: #fafafa;
+  }
+      

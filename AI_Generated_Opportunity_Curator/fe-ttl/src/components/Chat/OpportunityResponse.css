@@ -1,0 +1,86 @@
+/* src/components/Chat/OpportunityResponse.css */
+.opp-response {
+    display: grid;
+    gap: 16px;
+  }
+  
+  .opp-card {
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  
+  .opp-summary .opp-section-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  
+  .opp-summary .opp-summary-text {
+    line-height: 1.5;
+    color: #333;
+  }
+  
+  .opp-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  @media (min-width: 768px) {
+    .opp-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .opp-item .opp-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  
+  .opp-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  
+  .opp-badge {
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  
+  .opp-field {
+    display: grid;
+    grid-template-columns: 20px 130px 1fr;
+    align-items: start;
+    gap: 8px;
+    padding: 6px 0;
+  }
+  
+  .opp-label {
+    font-weight: 600;
+    color: #444;
+  }
+  
+  .opp-value {
+    color: #222;
+    white-space: pre-wrap;
+  }
+  
+  .opp-icon {
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+  
+  .opp-raw .opp-pre {
+    margin: 0;
+    white-space: pre-wrap;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.9rem;
+  }
+  
