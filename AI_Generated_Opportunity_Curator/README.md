@@ -4,7 +4,7 @@
 
 - Last updated 8/10/25
 
-This folder contains a Gemini chatbot app with a FastAPI Python backend and a React frontend.
+This folder contains a Gemini chatbot app with a FastAPI Python backend and a React frontend.<br/> 
 React Frontend ←→ HTTP/JSON API ←→ Python Backend
 
 ## Setup
@@ -21,14 +21,14 @@ pip install -r requirements.txt
 
 1. **Write your Gemini API key in the .env file**
 
-2. **Start the backend (FastAPI)**
+2. **Start the backend (FastAPI)**<br/> 
    From the current directory:
 
 ```bash
 python gemini_backend.py
 ```
 
-3. **Start the frontend (React) in the **
+3. **Start the frontend (React)**<br/> 
    In a new terminal, in the fe-ttl directory:
 
 ```bash
