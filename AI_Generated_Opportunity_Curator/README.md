@@ -1,10 +1,17 @@
-# Gemini Chatbot App - Coded using CursorAI
+# Trusted to Lead
 
-This folder contains a simple Gemini chatbot app with a FastAPI backend and a Streamlit frontend.
+## A Gemini RAG Chatbot App for Students - coded with the help of AI tools
+
+- Last updated 8/10/25
+
+This folder contains a Gemini chatbot app with a FastAPI Python backend and a React frontend.
+React Frontend ←→ HTTP/JSON API ←→ Python Backend
 
 ## Setup
 
 **Install dependencies**
+
+(8/10/25) Update the requirements.txt (there's a lot more now)
 
 ```bash
 pip install -r requirements.txt
@@ -12,31 +19,23 @@ pip install -r requirements.txt
 
 ## Running the App
 
-1. **Set an environmental variable for the Gemini API key**
-
-```bash
-export GEMINI_API_KEY="your_actual_key"
-```
+1. **Write your Gemini API key in the .env file**
 
 2. **Start the backend (FastAPI)**
+   From the current directory:
 
 ```bash
-uvicorn gemini_backend:app --reload --port 8000
+python gemini_backend.py
 ```
 
-3. **Start the frontend (Streamlit)**
-   In a new terminal:
+3. **Start the frontend (React) in the **
+   In a new terminal, in the fe-ttl directory:
 
 ```bash
-streamlit run streamlit_frontend.py
+npm run dev
 ```
 
-This should open a new window
-
-5. **Use the app**
-
-- Open the Streamlit app in your browser (usually at http://localhost:8501)
-- Type a message and chat with Llama2!
+A link to a locahost site should appear in the terminal.
 
 So... here are some notes to help me understand the tech stack of RAG.
 

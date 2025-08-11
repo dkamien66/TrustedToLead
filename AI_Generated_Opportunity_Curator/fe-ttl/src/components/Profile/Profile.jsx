@@ -6,7 +6,10 @@ import './Profile.css';
 
 const Profile = () => {
   const { userProfile, saveProfile, isAdmin } = useAppContext();
-  const [text, setText] = useState(userProfile.text || '');
+  const [major, setMajor] = useState(userProfile.major || '');
+  const [leadershipSkills, setLeadershipSkills] = useState(userProfile.leadershipSkills || '');
+  const [bigPictureGoals, setBigPictureGoals] = useState(userProfile.bigPictureGoals || '');
+  const [experiences, setExperiences] = useState(userProfile.experiences || ''); 
   const [resume, setResume] = useState(null);
   const [resumeContent, setResumeContent] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -29,6 +32,7 @@ const Profile = () => {
     }
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSaving(true);
@@ -36,13 +40,16 @@ const Profile = () => {
     // Simulate API call
     setTimeout(() => {
       const profileData = {
-        text,
+        major: major,
+        leadershipSkills: leadershipSkills,
+        bigPictureGoals: bigPictureGoals,
+        experiences: experiences,
         resume: resume ? {
           name: resume.name,
           content: resumeContent
         } : null
       };
-      
+      console.log(profileData);
       saveProfile(profileData);
       setIsSaving(false);
       setShowSuccess(true);
@@ -61,13 +68,46 @@ const Profile = () => {
           
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="profileText">
-              <Form.Label>Share your thoughts, goals, or any information you'd like to include:</Form.Label>
+              <Form.Label>What's your major?</Form.Label>
               <Form.Control
                 as="textarea"
-                rows={5}
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="Tell us about yourself, your interests, and your goals..."
+                rows={2}
+                value={major}
+                onChange={(e) => setMajor(e.target.value)}
+                placeholder="e.g. I'm a Finance major"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="profileText">
+              <Form.Label>What leadership skills do you want to develop?</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={2}
+                value={leadershipSkills}
+                onChange={(e) => setLeadershipSkills(e.target.value)}
+                placeholder="e.g. I want to develop my executive presence and empathy"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="profileText">
+              <Form.Label>What bigger picture goals do you have?</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={2}
+                value={bigPictureGoals}
+                onChange={(e) => setBigPictureGoals(e.target.value)}
+                placeholder="e.g. I want to grow my network and learn more about finance. I want to land a finance internship."
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="profileText">
+              <Form.Label>What experiences have you already had?</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={2}
+                value={experiences}
+                onChange={(e) => setExperiences(e.target.value)}
+                placeholder="e.g. I attended the Leadership & Inclusion Speaker Series: Building Equitable Workplaces. I'm in the Society for Human Resource Management. I attended the Madison Startup Fair."
               />
             </Form.Group>
 

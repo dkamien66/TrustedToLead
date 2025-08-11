@@ -127,7 +127,9 @@ def query_gemini_with_context(message: str, system_prompt: str = "") -> str:
         )
         context = f"Opportunities to go to:\n{events_block}\n\nPeople to talk to:\n{people_block}"
 
-    prompt = f"{system_prompt}\n\nContext:\n{context}\n\nUser question: {message}"
+    prompt = f"{system_prompt}\nIf the user already has attended an event or talked to a person, 
+    you should skip the event or person given in the following context in your answer\n
+    Context:\n{context}\n\nUser question: {message}"
 
     try:
         resp = gemini_model.generate_content(prompt)
@@ -139,6 +141,7 @@ def query_gemini_with_context(message: str, system_prompt: str = "") -> str:
 async def chat_endpoint(request: ChatRequest):
     try:
         answer = query_gemini_with_context(request.message, request.system_prompt)
+        print(answer)
         return {"response": answer}
     except Exception as e:
         return {"error": str(e)}
