@@ -275,8 +275,8 @@ const PlanTab = () => {
                 <ListGroup.Item action onClick={() => setInput("Create a semester plan for leadership development")}>
                   <FaCalendarAlt className="me-2" /> Leadership Development
                 </ListGroup.Item>
-                <ListGroup.Item action onClick={() => setInput("I want to prepare for an internship. Here is its description:")}>
-                  <FaCalendarAlt className="me-2" /> Internship Preparation 
+                <ListGroup.Item action onClick={() => setInput("I want to prepare for an internship. Here is a copied description:")}>
+                  <FaCalendarAlt className="me-2" /> Internship Preparation Plan
                 </ListGroup.Item>
               </ListGroup>
             </Card>

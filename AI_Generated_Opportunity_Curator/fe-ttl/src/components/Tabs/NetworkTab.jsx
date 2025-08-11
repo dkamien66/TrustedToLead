@@ -228,7 +228,6 @@ const NetworkTab = () => {
       const fullMessage = userProfile?.text
         ? `${trimmed}\n\nUser Profile: ${userProfile.text}`
         : trimmed;
-
       const data = await chatWithBot(fullMessage, NETWORK_SYSTEM_PROMPT);
       const text = typeof data?.response === 'string' ? data.response : '';
       if (!text) throw new Error('Empty response from server');

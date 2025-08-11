@@ -37,19 +37,12 @@ const Profile = () => {
     e.preventDefault();
     setIsSaving(true);
     
+    // Combine all input information (Major, Leadership Skills, Big picture goals, and experiences)
     // Simulate API call
     setTimeout(() => {
       const profileData = {
-        major: major,
-        leadershipSkills: leadershipSkills,
-        bigPictureGoals: bigPictureGoals,
-        experiences: experiences,
-        resume: resume ? {
-          name: resume.name,
-          content: resumeContent
-        } : null
+        text: "The student's major is " + major + ". The student is interested in developing the following leadership skills: " + leadershipSkills + ". The student has the following big picture goals: " + bigPictureGoals + ". The student has already had the following experiences: " + experiences + ". The student's resume contains the following information: " + resumeContent
       };
-      console.log(profileData);
       saveProfile(profileData);
       setIsSaving(false);
       setShowSuccess(true);

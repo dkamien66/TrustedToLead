@@ -95,6 +95,8 @@ def retrieve_people(query: str, top_k: int = 3):
     return [people[i] for i in I[0]]
 
 def query_gemini_with_context(message: str, system_prompt: str = "") -> str:
+    print("USER\n" + message)
+    print("SYSTEM_PROMPT\n" + system_prompt)
     # Build contextual string (always a string, never a list)
     if "opportunity curator" in system_prompt:
         retrieved = retrieve_events(message)
@@ -127,10 +129,15 @@ def query_gemini_with_context(message: str, system_prompt: str = "") -> str:
         )
         context = f"Opportunities to go to:\n{events_block}\n\nPeople to talk to:\n{people_block}"
 
-    prompt = f"{system_prompt}\nIf the user already has attended an event or talked to a person, 
-    you should skip the event or person given in the following context in your answer\n
-    Context:\n{context}\n\nUser question: {message}"
-
+    prompt = f"""
+        {system_prompt}
+        \nHere is the relevant context information you are to use in your response. Context: {context}
+        \nThis is what the user is requesting: {message}
+        If the user request contains information that they have already experienced an event that is
+        also in the context or they have already spoken with someone that is also in the context, do not
+        include that event or person again in your recommendation response.
+    """
+    print("FINAL PROMPT:\n"+prompt)
     try:
         resp = gemini_model.generate_content(prompt)
         return getattr(resp, "text", "").strip() or "[No text returned]"
@@ -140,8 +147,10 @@ def query_gemini_with_context(message: str, system_prompt: str = "") -> str:
 @app.post("/chat")
 async def chat_endpoint(request: ChatRequest):
     try:
+        print("REQUEST\n"+request)
+        print("REQUEST MESSAGE ATTR\n" + request.message)
         answer = query_gemini_with_context(request.message, request.system_prompt)
-        print(answer)
+        print("ANSWER\n" + answer)
         return {"response": answer}
     except Exception as e:
         return {"error": str(e)}

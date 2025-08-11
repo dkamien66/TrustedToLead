@@ -23,6 +23,10 @@
   font-weight: 600;
 }
 
+.profile-card .form-label {
+  font-weight: bold;
+}
+
 .resume-preview {
   background-color: #f8f9fa;
   border: 1px solid #e9ecef;
@@ -90,4 +94,8 @@
     margin: 0 -10px;
     border-radius: 0;
   }
+}
+
+Form.Label {
+  font-size: 20;
 }
