@@ -1,10 +1,17 @@
 import streamlit as st
 import requests
+import json
 
 st.title("Kitchen Table Test – Leadership Scenario")
 
 # Example scenario
-default_scenario = "Your team is overworked and you need to implement weekend shifts. Company finances are tight, morale is low, and customers are complaining about delays."
+scenario_bank = [
+    "Your team is overworked and you need to implement weekend shifts. Company finances are tight, morale is low, and customers are complaining about delays.",
+    "Layoffs",
+    "Demanding remote work to change to in person",
+    ""
+]
+default_scenario = scenario_bank[0]
 scenario = st.text_area("Scenario", value=default_scenario)
 
 decision = st.text_input("What decision would you make?")
@@ -21,13 +28,13 @@ if st.button("Submit for AI Feedback"):
             }
         )
         try:
-            feedback = resp.json()
+            # Try to parse the model's output as JSON
             st.subheader("What you did well")
-            st.write(feedback.get("well_done", "No feedback."))
+            st.write(resp.get("well_done", "No feedback."))
             st.subheader("What was lacking")
-            st.write(feedback.get("lacking", "No feedback."))
+            st.write(resp.get("lacking", "No feedback."))
             st.subheader("Suggestions for improvement")
-            st.write(feedback.get("suggestions", "No feedback."))
+            st.write(resp.get("suggestions", "No feedback."))
         except Exception as e:
             st.error(f"Error parsing feedback: {e}")
             st.write(resp.text) 
