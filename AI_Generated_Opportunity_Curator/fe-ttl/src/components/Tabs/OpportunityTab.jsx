@@ -100,7 +100,6 @@ function parseKeyValues(text = '') {
   // sort by our preferred order
   const order = new Map(KVT_LABELS.map((k, i) => [k.toLowerCase(), i]));
   fields.sort((a, b) => (order.get(a.label.toLowerCase()) ?? 999) - (order.get(b.label.toLowerCase()) ?? 999));
-  console.log('fields', fields);
   return { intro, fields };
 }
 
@@ -343,11 +342,10 @@ const OpportunityTab = () => {
     setError(null);
 
     try {
-      console.log("USER PROFILE\n" + JSON.stringify(userProfile))
       const fullMessage = userProfile?.text
         ? `Trimmed\n${trimmed}\n\nUser Profile: ${userProfile.text}`
         : trimmed;
-      console.log(fullMessage)
+
       const data = await chatWithBot(fullMessage, OPPORTUNITY_SYSTEM_PROMPT);
       const text = typeof data?.response === 'string' ? data.response : '';
       if (!text) throw new Error('Empty response from server');
