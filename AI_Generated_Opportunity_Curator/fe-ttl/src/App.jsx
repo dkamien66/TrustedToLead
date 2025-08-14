@@ -9,6 +9,7 @@ import Profile from './components/Profile/Profile';
 import OpportunityTab from './components/Tabs/OpportunityTab';
 import NetworkTab from './components/Tabs/NetworkTab';
 import PlanTab from './components/Tabs/PlanTab';
+import LeadershipQuestionnaire from './components/LeadershipQuestionnaire/LeadershipQuestionnaire';
 import { AppProvider } from './context/AppContext';
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
 
   useEffect(() => {
     const hash = window.location.hash.substring(1);
-    if (['profile', 'opportunity', 'network', 'plan'].includes(hash)) {
+    if (['profile', 'opportunity', 'network', 'plan', 'questionnaire'].includes(hash)) {
       setActiveTab(hash);
     }
   }, []);
@@ -63,11 +64,15 @@ function App() {
               <NavDropdown.Item eventKey="network">Networking Opportunities</NavDropdown.Item>
               <NavDropdown.Item eventKey="plan">Career Planner</NavDropdown.Item>
             </NavDropdown>
+            <Nav.Item>
+              <Nav.Link eventKey="questionnaire">Leadership Questionnaire</Nav.Link>
+            </Nav.Item>
           </Nav>
           {activeTab === "profile" && <Profile />}
           {activeTab === "opportunity" && <OpportunityTab />}
           {activeTab === "network" && <NetworkTab />}
           {activeTab === "plan" && <PlanTab />}
+          {activeTab === "questionnaire" && <LeadershipQuestionnaire />}
         </Container>
       </div>
     </AppProvider>
