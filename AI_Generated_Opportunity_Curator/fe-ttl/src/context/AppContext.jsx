@@ -7,8 +7,11 @@ export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider = ({ children }) => {
   const [userProfile, setUserProfile] = useState({
-    text: '',
-    resume: null,
+    major: '',
+    leadershipSkills: '',
+    bigPictureGoals: '',
+    experiences: '',
+    resumeContent: '',
   });
   const [isAdmin, setIsAdmin] = useState(false);
   const [messages, setMessages] = useState({

@@ -6,7 +6,7 @@ Hi! Welcome to a project folder for Trusted to Lead, hosted by Jirs Meuris and t
 
 ## Who is involved?
 
-We're grateful for this opportunity from Jirs Meuris and Sandra Bradley.
+We're grateful for this opportunity from Jirs Meuris and Sandra Bradley. Tremendous thanks to those we interviewed to learn about advising.
 Team members:
 
 - Jeremy Kintana (Team Lead)

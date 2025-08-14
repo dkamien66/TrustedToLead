@@ -6,12 +6,12 @@ import './Profile.css';
 
 const Profile = () => {
   const { userProfile, saveProfile, isAdmin } = useAppContext();
-  const [major, setMajor] = useState(userProfile.major || '');
-  const [leadershipSkills, setLeadershipSkills] = useState(userProfile.leadershipSkills || '');
-  const [bigPictureGoals, setBigPictureGoals] = useState(userProfile.bigPictureGoals || '');
-  const [experiences, setExperiences] = useState(userProfile.experiences || ''); 
-  const [resume, setResume] = useState(null);
-  const [resumeContent, setResumeContent] = useState('');
+  const [p_major, setMajor] = useState(userProfile.major || '');
+  const [p_leadershipSkills, setLeadershipSkills] = useState(userProfile.leadershipSkills || '');
+  const [p_bigPictureGoals, setBigPictureGoals] = useState(userProfile.bigPictureGoals || '');
+  const [p_experiences, setExperiences] = useState(userProfile.experiences || ''); 
+  const [p_resume, setResume] = useState(null);
+  const [p_resumeContent, setResumeContent] = useState(userProfile.resumeContent || '');
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -41,7 +41,11 @@ const Profile = () => {
     // Simulate API call
     setTimeout(() => {
       const profileData = {
-        text: "The student's major is " + major + ". The student is interested in developing the following leadership skills: " + leadershipSkills + ". The student has the following big picture goals: " + bigPictureGoals + ". The student has already had the following experiences: " + experiences + ". The student's resume contains the following information: " + resumeContent
+        major: p_major,
+        leadershipSkills: p_leadershipSkills,
+        bigPictureGoals: p_bigPictureGoals,
+        experiences: p_experiences,
+        resumeContent: p_resumeContent,
       };
       saveProfile(profileData);
       setIsSaving(false);
@@ -65,7 +69,7 @@ const Profile = () => {
               <Form.Control
                 as="textarea"
                 rows={2}
-                value={major}
+                value={p_major}
                 onChange={(e) => setMajor(e.target.value)}
                 placeholder="e.g. I'm a Finance major"
               />
@@ -76,7 +80,7 @@ const Profile = () => {
               <Form.Control
                 as="textarea"
                 rows={2}
-                value={leadershipSkills}
+                value={p_leadershipSkills}
                 onChange={(e) => setLeadershipSkills(e.target.value)}
                 placeholder="e.g. I want to develop my executive presence and empathy"
               />
@@ -87,7 +91,7 @@ const Profile = () => {
               <Form.Control
                 as="textarea"
                 rows={2}
-                value={bigPictureGoals}
+                value={p_bigPictureGoals}
                 onChange={(e) => setBigPictureGoals(e.target.value)}
                 placeholder="e.g. I want to grow my network and learn more about finance. I want to land a finance internship."
               />
@@ -98,7 +102,7 @@ const Profile = () => {
               <Form.Control
                 as="textarea"
                 rows={2}
-                value={experiences}
+                value={p_experiences}
                 onChange={(e) => setExperiences(e.target.value)}
                 placeholder="e.g. I attended the Leadership & Inclusion Speaker Series: Building Equitable Workplaces. I'm in the Society for Human Resource Management. I attended the Madison Startup Fair."
               />
@@ -112,18 +116,18 @@ const Profile = () => {
                 accept=".pdf,.docx,.txt"
                 className="mb-2"
               />
-              {resume && (
+              {p_resume && (
                 <div className="text-muted small">
-                  Selected file: {resume.name}
+                  Selected file: {p_resume.name}
                 </div>
               )}
             </Form.Group>
 
-            {resumeContent && (
+            {p_resumeContent && (
               <Form.Group className="mb-3">
                 <Form.Label>Resume Content:</Form.Label>
                 <div className="resume-preview">
-                  <pre>{resumeContent}</pre>
+                  <pre>{p_resumeContent}</pre>
                 </div>
               </Form.Group>
             )}

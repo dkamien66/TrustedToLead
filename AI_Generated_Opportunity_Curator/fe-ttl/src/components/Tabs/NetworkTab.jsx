@@ -225,8 +225,9 @@ const NetworkTab = () => {
     setError(null);
 
     try {
-      const fullMessage = userProfile?.text
-        ? `${trimmed}\n\nUser Profile: ${userProfile.text}`
+      const profileText = `The student's major is ${userProfile.major}. The student is interested in developing the following leadership skills: ${userProfile.leadershipSkills}. The student has the following big picture goals: ${userProfile.bigPictureGoals}. The student has already had the following experiences: ${userProfile.experiences}. The student's resume contains the following information: ${userProfile.resumeContent}`;
+      const fullMessage = profileText
+        ? `${trimmed}\n\nUser Profile: ${profileText}`
         : trimmed;
       const data = await chatWithBot(fullMessage, NETWORK_SYSTEM_PROMPT);
       const text = typeof data?.response === 'string' ? data.response : '';
