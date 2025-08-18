@@ -3,6 +3,7 @@ import { Card, Form, Button, Alert } from 'react-bootstrap';
 import { useAppContext } from '../../context/AppContext';
 import styles from './LeadershipQuestionnaire.module.css';
 import { chatWithBot } from '../../services/api';
+import ReactMarkdown from 'react-markdown';
 
 const LeadershipQuestionnaire = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -56,27 +57,13 @@ const LeadershipQuestionnaire = () => {
   const getPersonalizedFeedback = async () => {
     setIsLoadingFeedback(true);
     
-    const systemPrompt = `First, provide a supportive comment on the overall score. Second, read the user's responses and then give encouraging and actionable feedback based on them, suggesting general areas of strength and areas for development in leadership skills. Assume higher scores indicate more developed skills.`;
-    let feedbackPrompt = `The user completed a leadership questionnaire with a score of ${score} out of ${totalPossibleScore}.\n`;
+    const systemPrompt = `You are an encouraging leadership coach. Your response must be formatted using correct Markdown. First, provide a supportive comment on the overall score. Then, give encouraging and actionable feedback based on the user's questionnaire responses, suggesting specific areas of strength and areas for development. Use headings, bold text, and bullet points to organize the feedback.`;
+    let feedbackPrompt = `The user completed a leadership questionnaire with a score of ${score} out of ${totalPossibleScore}. The responses are as follows:\n`;
     for (const q of questions) {
-        feedbackPrompt += `The user responded ${q.response} to the statement ${q.text}\n`
+      feedbackPrompt += `- User responded "${q.response}" to the statement "${q.text}".\n`
     }
     
     try {
-      // This is where you would make the actual API call to your backend
-      // const response = await fetch('http://localhost:8000/chat', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     message: feedbackPrompt,
-      //     system_prompt: "You are an encouraging leadership coach...",
-      //     chat_type: "questionnaire"
-      //   })
-      // });
-      // const data = await response.json();
-      // setFeedback(data.response || data.error || "Could not get feedback.");
-      
-      // For demo purposes, providing sample feedback based on score
       let backend = await chatWithBot(feedbackPrompt, systemPrompt);
       const text = typeof backend?.response === 'string' ? backend.response : '';
       if (!text) throw new Error('Empty response from server in Leadership Questionnaire');
@@ -88,6 +75,7 @@ const LeadershipQuestionnaire = () => {
         setIsLoadingFeedback(false);
       }
   };
+  
 
   const getScoreColor = () => {
     const percentage = (score / totalPossibleScore) * 100;
@@ -105,7 +93,7 @@ const LeadershipQuestionnaire = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>
-          ⭐ Leadership Self-Assessment Questionnaire
+          Leadership Self-Assessment Questionnaire
         </h1>
         <p className={styles.subtitle}>Discover your leadership strengths and areas for growth</p>
       </div>
@@ -156,7 +144,7 @@ const LeadershipQuestionnaire = () => {
           <div className={styles.completedContainer}>
             <div>
               <h2 className={styles.completedTitle}>
-                ✅ Questionnaire Complete!
+                Questionnaire Complete!
               </h2>
               <p className={styles.completedSubtitle}>
                 Thank you for taking the time to assess your leadership skills.
@@ -186,7 +174,7 @@ const LeadershipQuestionnaire = () => {
                   cursor: isLoadingFeedback ? 'not-allowed' : 'pointer'
                 }}
               >
-                📈 {isLoadingFeedback ? 'Getting Feedback...' : 'Get Personalized Feedback'}
+                {isLoadingFeedback ? 'Getting Feedback...' : 'Get Personalized Feedback'}
               </button>
               
               <button
@@ -195,7 +183,7 @@ const LeadershipQuestionnaire = () => {
                 onMouseOver={(e) => e.target.style.backgroundColor = '#4b5563'}
                 onMouseOut={(e) => e.target.style.backgroundColor = '#6b7280'}
               >
-                🔄 Restart Questionnaire
+                Restart Questionnaire
               </button>
             </div>
           </div>
@@ -203,11 +191,10 @@ const LeadershipQuestionnaire = () => {
           {feedback && (
             <div className={styles.feedbackContainer}>
               <h3 className={styles.feedbackTitle}>
-                📈 Personalized Feedback
+                Personalized Feedback
               </h3>
-              <div className={styles.feedbackText}>
-                {feedback}
-              </div>
+              {/* This is the only line you need to change! */}
+              <ReactMarkdown className={styles.feedbackText}>{feedback}</ReactMarkdown>
             </div>
           )}
         </div>

@@ -1,6 +1,17 @@
 import streamlit as st
 import requests
 
+st.markdown(
+    """ß
+    <style>
+    h1, h2, h3, h4, h5, h6 {
+        font-family: sans-serif;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Initialize session state for different chat histories and profile
 if "opportunity_messages" not in st.session_state:
     st.session_state["opportunity_messages"] = []
@@ -181,24 +192,14 @@ if st.session_state["user_mode"] == "Student":
                 response = requests.post(
                     "http://localhost:8000/chat",
                     json={
-                        "message": plan_input + " " + st.session_state['user_profile_text'] + " " + st.session_state['internship_details'],
+                        "message": your_questionnaire_results,
                         "system_prompt": f"""
-                            You are a plan curator that helps the user create actionable plans based on 
-                            who they are and what job responsibilities, skills, and knowledge are all 
-                            needed for the internship the user inputs.
-
-                            Use the given opportunities and events to provide a step-by-step plan that's 
-                            reasonable to do in one month, like a roadmap tailored to their goals and 
-                            interests, to help them prepare for the internship.
-
-                            The plan must include opportunities and people to connect with.
-                            You must include all of the information of the event (the title, type, dates, 
-                            description, related business majors, and leadership skills developed).
-                            You must include all of the information of the person (name, role, related_fields, 
-                            leadership_counseling, email).
-
-                            Make the plan diverse, not having to follow the order of the opportunities 
-                            and people in the given context, but also have a main purpose. Make it fun!
+                            You are a leadership development AI that provides personalized feedback based on a user's self-assessment.
+                            Provide a detailed response that is structured using clear Markdown formatting, including:
+                            * Headings for different sections (e.g., "Areas of Strength", "Areas for Development").
+                            * Bold text (`**text**`) for emphasis.
+                            * Bulleted lists (`* item`) for skills and actionable steps.
+                            Ensure the response is easy to read and has proper line breaks between paragraphs and list items.
                         """
                     },
                     timeout=180

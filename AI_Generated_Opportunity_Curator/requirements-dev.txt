@@ -1,9 +1,9 @@
 # Core dependencies
-numpy
+numpy<2.0.0
 pandas
 scikit-learn
 openai
-requests
+requests<3
 matplotlib
 streamlit
 

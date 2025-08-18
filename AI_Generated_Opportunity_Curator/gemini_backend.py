@@ -12,6 +12,12 @@ import google.generativeai as genai
 # get the env
 load_dotenv()
 
+class FeedbackRequest(BaseModel):
+    responses: dict
+
+class ChatRequest(BaseModel):
+    message: str
+    system_prompt: str = ""
 
 # NOTE: Newer public models are often "gemini-1.5-flash" or "gemini-1.5-pro".
 # Keep as a constant so it's easy to change.
@@ -50,6 +56,36 @@ sentence_model = SentenceTransformer("all-MiniLM-L6-v2")
 def _abs_path(rel_path: str) -> str:
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), rel_path)
 
+def process_leadership_feedback(responses: dict) -> dict:
+    system_prompt = """
+        You are an expert leadership coach. Your task is to analyze the provided feedback from a leadership questionnaire.
+        Organize the feedback into three distinct sections: "Strengths," "Areas for Growth," and "Actionable Next Steps."
+        For each section, provide a short introductory paragraph and a bulleted list of key points.
+        The final response MUST be in JSON format with the following structure:
+        {
+          "report_title": "Your Leadership Feedback Report",
+          "introduction": "...",
+          "sections": [
+            {"title": "Strengths", "intro_paragraph": "...", "points": ["...", "..."]},
+            {"title": "Areas for Growth", "intro_paragraph": "...", "points": ["...", "..."]},
+            {"title": "Actionable Next Steps", "intro_paragraph": "...", "points": ["...", "..."]}
+          ],
+          "closing_statement": "..."
+        }
+    """
+    
+    prompt_message = f"Here are the questionnaire responses to analyze:\n\n{json.dumps(responses, indent=2)}"
+    
+    try:
+        raw_response = gemini_model.generate_content(
+            f"{system_prompt}\n\n{prompt_message}"
+        ).text.strip()
+        
+        return json.loads(raw_response)
+        
+    except Exception as e:
+        print(f"Error processing feedback: {e}")
+        return {"error": "Failed to generate structured feedback."}
 # -------- Load data (events) ----------
 events_path = _abs_path("mock_data/events.json")
 with open(events_path, "r", encoding="utf-8") as f:
@@ -149,7 +185,15 @@ async def chat_endpoint(request: ChatRequest):
         return {"response": answer}
     except Exception as e:
         return {"error": str(e)}
-
+    
+@app.post("/feedback")
+async def feedback_endpoint(request: FeedbackRequest):
+    try:
+        structured_feedback = process_leadership_feedback(request.responses)
+        return structured_feedback
+    except Exception as e:
+        return {"error": str(e)}
+    
 if __name__ == "__main__":
     # Start the FastAPI server if run as a script
     import uvicorn
