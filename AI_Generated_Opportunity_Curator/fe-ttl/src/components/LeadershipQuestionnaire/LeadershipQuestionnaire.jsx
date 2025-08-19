@@ -194,7 +194,7 @@ const LeadershipQuestionnaire = () => {
                 Personalized Feedback
               </h3>
               {/* This is the only line you need to change! */}
-              <ReactMarkdown className={styles.feedbackText}>{feedback}</ReactMarkdown>
+              <ReactMarkdown>{feedback}</ReactMarkdown>
             </div>
           )}
         </div>
