@@ -1,6 +1,6 @@
 // src/components/Tabs/NetworkTab.jsx
 import React, { useState } from 'react';
-import { Card, Button, Spinner, Alert, Tabs, Tab } from 'react-bootstrap';
+import { Card, Button, Spinner, Alert } from 'react-bootstrap';
 import { FaPaperPlane } from 'react-icons/fa';
 import { chatWithBot } from '../../services/api';
 import { useAppContext } from '../../context/AppContext';
@@ -9,202 +9,182 @@ import '../Chat/Chat.css';
 
 const NETWORK_SYSTEM_PROMPT = `You are a network curator that helps users find and connect with professionals 
 who can help them with their career goals. Provide specific recommendations for 
-people to connect with, including their name, role, related fields, and how they 
-can help the user based on their profile and interests. Format fields as **Label:** Value pairs.`;
+people to connect with, including their name, role, related fields, email, and how they 
+can help the user based on their profile and interests.`;
 
 /* ----------------- helpers (no new files) ----------------- */
 
-const ACCENT = '#d92929';
-const styles = {
-  shell: {
-    border: '1px solid rgba(0,0,0,0.08)',
-    borderRadius: 16,
-    boxShadow: '0 6px 18px rgba(0,0,0,0.06)',
-    overflow: 'hidden',
-    marginBottom: 10
-  },
-  body: {
-    padding: '14px 16px',
-    color: '#101010',
-    lineHeight: 1.55
-  },
-  accent: {
-    height: 4,
-    background: `linear-gradient(90deg, ${ACCENT}, ${ACCENT}66)`
-  },
-  label: {
-    fontSize: '0.78rem',
-    fontWeight: 800,
-    letterSpacing: '.04em',
-    textTransform: 'uppercase',
-    color: '#6a6a6a',
-    marginBottom: 6
-  },
-  value: {
-    lineHeight: 1.55,
-    color: '#101010',
-    whiteSpace: 'pre-line'
+// Function to clean JSON text by removing markdown code blocks
+function cleanJsonText(text = '') {
+  let cleanedText = String(text).trim();
+  
+  // Remove ```json at the beginning
+  if (cleanedText.startsWith('```json')) {
+    cleanedText = cleanedText.substring(7);
+  } else if (cleanedText.startsWith('```')) {
+    cleanedText = cleanedText.substring(3);
   }
-};
-
-const KVT_LABELS = [
-  'Name','Person','Contact','Role','Title','Department',
-  'Related Fields','Expertise','Focus Areas',
-  'Why Connect','How They Can Help','Best For','Recommended If',
-  'Contact Tip','Suggested Message','Topics to Discuss','Notes'
-];
-
-function cleanText(s = '') {
-  return String(s)
-    .replace(/\r/g, '')
-    .replace(/\u00A0/g, ' ')
-    .replace(/\*\*\*/g, '')
-    .replace(/\*\*/g, '')
-    .replace(/(^|\s)\*(?=\s|$)/g, ' ')
-    .replace(/\s\*\s+/g, '\n')
-    .replace(/^[*•>\-–—]+\s*/gm, '')
-    .replace(/[ \t]+/g, ' ')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+  
+  // Remove ``` at the end
+  if (cleanedText.endsWith('```')) {
+    cleanedText = cleanedText.substring(0, cleanedText.length - 3);
+  }
+  
+  return cleanedText.trim();
 }
 
-function parseKeyValues(text = '') {
-  const input = String(text)
-    .replace(/\r/g, '')
-    .replace(/\u00A0/g, ' ')
-    .replace(/[ \t]+/g, ' ')
-    .replace(/\n{3,}/g, '\n\n')
-    .replace(/\*\s+\*/g, '**')
-    .trim();
-
-  const boldRe = /\*\*\s*([A-Za-z][A-Za-z ()/&-]+?)\s*\*\*\s*:\s*/g;
-  let matches = [];
-  let m;
-  while ((m = boldRe.exec(input)) !== null) {
-    matches.push({ label: m[1].trim(), start: m.index, after: m.index + m[0].length });
+// Parse JSON text into structured data
+function parseJsonContacts(text = '') {
+  try {
+    const cleanedText = cleanJsonText(text);
+    const data = JSON.parse(cleanedText);
+    
+    const result = {
+      intro: data.Intro || '',
+      contacts: []
+    };
+    
+    // Find all contact keys (Contact 1, Contact 2, etc.)
+    const contactKeys = Object.keys(data).filter(key => 
+      key.toLowerCase().startsWith('contact')
+    );
+    
+    contactKeys.forEach(key => {
+      const contact = data[key];
+      if (typeof contact === 'object' && contact !== null) {
+        const fields = Object.entries(contact).map(([fieldKey, fieldValue]) => ({
+          label: fieldKey,
+          value: String(fieldValue)
+        }));
+        
+        result.contacts.push({
+          id: key,
+          fields: fields
+        });
+      }
+    });
+    
+    return result;
+  } catch (error) {
+    console.error('Error parsing JSON contacts:', error);
+    // Fallback to empty result
+    return {
+      intro: '',
+      contacts: []
+    };
   }
-  if (matches.length === 0) {
-    const plainRe = /(^|[\n\s*•\-–—])([A-Za-z][A-Za-z ()/&-]+?)\s*:\s*/g;
-    let p;
-    while ((p = plainRe.exec(input)) !== null) {
-      matches.push({
-        label: p[2].trim(),
-        start: p.index + (p[1] ? p[1].length : 0),
-        after: p.index + p[0].length
-      });
-    }
-  }
-  if (matches.length === 0) return { intro: cleanText(input), fields: [] };
-
-  const isKnown = (lab) => KVT_LABELS.some(k => k.toLowerCase() === lab.toLowerCase());
-  matches = matches.filter(x => isKnown(x.label));
-  if (matches.length === 0) return { intro: cleanText(input), fields: [] };
-
-  const intro = cleanText(input.slice(0, matches[0].start));
-
-  const fields = matches.map((cur, i) => {
-    const next = matches[i + 1];
-    const raw = input.slice(cur.after, next ? next.start : undefined).trim();
-    if (!raw) return null;
-    const canonical = KVT_LABELS.find(k => k.toLowerCase() === cur.label.toLowerCase()) || cur.label;
-    return { label: canonical, value: cleanText(raw) };
-  }).filter(Boolean);
-
-  return { intro, fields };
 }
 
-/**
- * Smart grouping:
- *  - If we see consecutive Names first, create N people, then
- *    assign subsequent fields in contiguous groups of length N (round-robin).
- *  - Otherwise fall back to the simple “new person at each Name” approach.
- */
-// Replace your current groupIntoPeople with this one
-function groupIntoPeople(fields) {
-  if (!fields.length) return [];
-
-  const isName = (l) => ['name','person','contact'].includes(l.toLowerCase());
-
-  // 1) Pull out all names in order → create people
-  const names = fields.filter(f => isName(f.label));
-  const people = names.length
-    ? names.map(n => ({ name: n.value, fields: [] }))
-    : [{ name: '', fields: [] }];
-
-  const n = people.length;
-
-  // 2) For everything that's NOT a name, assign by label-specific round-robin.
-  //    This handles the “columns” layout: Name A,B,C then Role x3 then Fields x3...
-  const perLabelCounts = Object.create(null);
-  for (const f of fields) {
-    if (isName(f.label)) continue;
-
-    const key = f.label.toLowerCase();
-    const i = perLabelCounts[key] ?? 0;     // how many of this label we've placed
-    const who = i % n;                      // which person gets this occurrence
-    people[who].fields.push(f);
-    perLabelCounts[key] = i + 1;
-  }
-
-  return people;
-}
-
-
-function ProseCards({ text }) {
-  const chunks = cleanText(text).split(/\n\s*\n/).filter(Boolean);
-  return (
-    <div className="mb-2">
-      {chunks.map((para, i) => (
-        <Card key={i} style={{ ...styles.shell, marginBottom: 8 }}>
-          <div style={styles.accent} />
-          <Card.Body style={styles.body}>{para}</Card.Body>
-        </Card>
-      ))}
-    </div>
-  );
-}
-
+// Render assistant message as JSON-based contact tiles
 function AssistantPeopleTabs({ text }) {
-  const { intro, fields } = parseKeyValues(text);
-  if (!fields.length) return <ProseCards text={intro || text} />;
-
-  const people = groupIntoPeople(fields);
+  const { intro, contacts } = parseJsonContacts(text);
 
   return (
     <div className="mb-2">
+      {/* Intro Container */}
       {intro && (
-        <Card className="mb-2" style={styles.shell}>
-          <div style={styles.accent} />
-          <Card.Body style={{ ...styles.body, background: '#fafafa' }}>{intro}</Card.Body>
+        <Card className="mb-3" style={{
+          border: '2px solid #d92929',
+          borderRadius: '12px',
+          backgroundColor: '#fff5f5'
+        }}>
+          <Card.Body style={{ 
+            lineHeight: 1.6, 
+            whiteSpace: 'pre-line',
+            fontSize: '1.1rem',
+            color: '#2c3e50'
+          }}>
+            {intro}
+          </Card.Body>
         </Card>
       )}
 
-      <Card style={styles.shell}>
-        <div style={styles.accent} />
-        <Card.Body style={styles.body}>
-          <Tabs defaultActiveKey="0" id="network-people-tabs" justify>
-            {people.map((p, idx) => (
-              <Tab eventKey={String(idx)} title={p.name || `Person ${idx + 1}`} key={idx}>
-                <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-2" style={{ marginTop: 10 }}>
-                  {p.fields.map((f, i2) => (
-                    <div className="col" key={`${p.name || idx}-${f.label}-${i2}`}>
-                      <Card className="h-100" style={{ borderRadius: 14, border: '1px solid rgba(0,0,0,0.08)' }}>
-                        <Card.Body>
-                          <div style={styles.label}>{f.label}</div>
-                          <div style={styles.value}>{f.value}</div>
-                        </Card.Body>
-                      </Card>
+      {/* Contact Containers */}
+      {contacts.map((contact) => (
+        <div key={contact.id} className="contact-container mb-4" style={{
+          border: '2px solid #e0e0e0',
+          borderRadius: '12px',
+          padding: '20px',
+          boxShadow: '0 6px 12px rgba(0,0,0,0.1)',
+          backgroundColor: '#ffffff'
+        }}>
+          {/* Contact Header */}
+          <div style={{
+            fontSize: '1.3rem',
+            fontWeight: 700,
+            color: '#2c3e50',
+            marginBottom: '20px',
+            paddingBottom: '12px',
+            borderBottom: '3px solid #d92929',
+            textAlign: 'center'
+          }}>
+            {contact.id}
+          </div>
+          
+          {/* 6 Tiles Grid */}
+          <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+            {contact.fields.map((field, fieldIndex) => (
+              <div className="col" key={`${field.label}-${fieldIndex}`}>
+                <Card className="h-100" style={{
+                  border: '1px solid #dee2e6',
+                  borderRadius: '8px',
+                  transition: 'transform 0.2s ease-in-out',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+                }}>
+                  <Card.Body style={{ padding: '16px' }}>
+                    <div
+                      style={{
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        letterSpacing: '.03em',
+                        textTransform: 'uppercase',
+                        color: '#d92929',
+                        marginBottom: '8px',
+                        borderBottom: '1px solid #e9ecef',
+                        paddingBottom: '6px'
+                      }}
+                    >
+                      {field.label}
                     </div>
-                  ))}
-                </div>
-              </Tab>
+                    <div style={{ 
+                      lineHeight: 1.5, 
+                      color: '#495057', 
+                      whiteSpace: 'pre-line',
+                      fontSize: '0.9rem',
+                      minHeight: '40px',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}>
+                      {field.value}
+                    </div>
+                  </Card.Body>
+                </Card>
+              </div>
             ))}
-          </Tabs>
-        </Card.Body>
-      </Card>
+          </div>
+        </div>
+      ))}
+      
+      {/* Fallback for non-JSON text */}
+      {contacts.length === 0 && (
+        <Card className="mb-2">
+          <Card.Body style={{ lineHeight: 1.45, whiteSpace: 'pre-line' }}>
+            {text}
+          </Card.Body>
+        </Card>
+      )}
     </div>
   );
 }
+
 /* ----------------- end helpers ----------------- */
 
 const NetworkTab = () => {
@@ -231,6 +211,7 @@ const NetworkTab = () => {
         : trimmed;
       const data = await chatWithBot(fullMessage, NETWORK_SYSTEM_PROMPT);
       const text = typeof data?.response === 'string' ? data.response : '';
+
       if (!text) throw new Error('Empty response from server');
 
       addMessage('network', { id: crypto.randomUUID(), role: 'assistant', content: text });

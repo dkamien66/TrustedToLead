@@ -10,203 +10,162 @@ import '../Chat/Chat.css';
 const OPPORTUNITY_SYSTEM_PROMPT = `You are an opportunity curator that gives specific opportunity recommendations 
 based on the context of retrieved events, so you must include all of the 
 information of the event (the title, type, dates, description, related 
-business majors, and leadership skills developed). Use the given user profile and 
-preferences to provide personalized recommendations. Format fields as **Label:** Value pairs in one paragraph if needed.
+business majors, leadership skills developed, and register & more details). Use the given user profile and 
+preferences to provide personalized recommendations.
 Include an explanation field like the other fields that explains why this opportunity fits the user.`;
 
 /* ----------------- helpers (NO new files) ----------------- */
 
-// Known labels to tile; order defines layout priority
-const KVT_LABELS = [
-  'Opportunity','Title','Type','Date','Dates','Time',
-  'Description','Related Business Majors','Related Majors',
-  'Related Fields','Leadership Skills','Leadership Skills Developed',
-  'Explanation'
-];
-
-// Stronger crumb cleaner + newline normalizer for values
-function cleanText(s = '') {
-  return String(s)
-    .replace(/\r/g, '')
-    .replace(/\u00A0/g, ' ')
-    // kill triple/double asterisks everywhere
-    .replace(/\*\*\*/g, '')
-    .replace(/\*\*/g, '')
-    // remove single '*' used as separators at edges/whitespace
-    .replace(/(^|\s)\*(?=\s|$)/g, ' ')
-    // if the model used " * " as inline separators, convert to real line breaks
-    .replace(/\s\*\s+/g, '\n')
-    // strip leading bullet markers per line
-    .replace(/^[*•>\-–—]+\s*/gm, '')
-    // collapse excessive spaces + blank lines
-    .replace(/[ \t]+/g, ' ')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
-}
-
-// Parse assistant text into { intro, fields:[{label,value}] }.
-// Works for "**Label:** value" jammed into one paragraph, tolerates stray '*'.
-function parseKeyValues(text = '') {
-  const input = String(text)
-    .replace(/\r/g, '')
-    .replace(/\u00A0/g, ' ')
-    .replace(/[ \t]+/g, ' ')
-    .replace(/\n{3,}/g, '\n\n')
-    .replace(/\*\s+\*/g, '**') // "** * **" → "**"
-    .trim();
-
-  // Prefer bold labels: **Label:** value
-  const boldRe = /\*\*\s*([A-Za-z][A-Za-z ()/&-]+?)\s*\*\*\s*:\s*/g;
-  let matches = [];
-  let m;
-  while ((m = boldRe.exec(input)) !== null) {
-    matches.push({ label: m[1].trim(), start: m.index, after: m.index + m[0].length });
-  }
-
-  // Fallback to plain "Label:" if no bold found
-  if (matches.length === 0) {
-    const plainRe = /(^|[\n\s*•\-–—])([A-Za-z][A-Za-z ()/&-]+?)\s*:\s*/g;
-    let p;
-    while ((p = plainRe.exec(input)) !== null) {
-      matches.push({
-        label: p[2].trim(),
-        start: p.index + (p[1] ? p[1].length : 0),
-        after: p.index + p[0].length
-      });
-    }
-  }
-
-  if (matches.length === 0) return { intro: cleanText(input), fields: [] };
-
-  // keep only known labels (case-insensitive)
-  const isKnown = (lab) => KVT_LABELS.some(k => k.toLowerCase() === lab.toLowerCase());
-  matches = matches.filter(x => isKnown(x.label));
-  if (matches.length === 0) return { intro: cleanText(input), fields: [] };
-
-  const rawIntro = input.slice(0, matches[0].start).trim();
-  const intro = cleanText(rawIntro);
-
-  const fields = matches.map((cur, i) => {
-    const next = matches[i + 1];
-    const raw = input.slice(cur.after, next ? next.start : undefined).trim();
-    if (!raw) return null;
-    const canonical = KVT_LABELS.find(k => k.toLowerCase() === cur.label.toLowerCase()) || cur.label;
-
-    // Clean value + convert inline separators to lines
-    const value = cleanText(raw);
-    return { label: canonical, value };
-  }).filter(Boolean);
-
-  // sort by our preferred order
-  const order = new Map(KVT_LABELS.map((k, i) => [k.toLowerCase(), i]));
-  fields.sort((a, b) => (order.get(a.label.toLowerCase()) ?? 999) - (order.get(b.label.toLowerCase()) ?? 999));
-  return { intro, fields };
-}
-
-// Parse assistant text into { intro, opportunities:[{fields:[{label,value}]}] }.
-// Groups fields by opportunities - explanation is now a regular field.
-function parseOpportunities(text = '') {
-  const input = String(text)
-    .replace(/\r/g, '')
-    .replace(/\u00A0/g, ' ')
-    .replace(/[ \t]+/g, ' ')
-    .replace(/\n{3,}/g, '\n\n')
-    .replace(/\*\s+\*/g, '**') // "** * **" → "**"
-    .trim();
-
-  // Split by opportunity markers (common patterns)
-  const opportunitySplits = input.split(/(?=Opportunity|Recommendation|Event|#\d+)/i);
+// Function to clean JSON text by removing markdown code blocks
+function cleanJsonText(text = '') {
+  let cleanedText = String(text).trim();
   
-  const opportunities = [];
-  let intro = '';
-
-  opportunitySplits.forEach((section, index) => {
-    if (index === 0 && !section.match(/^(Opportunity|Recommendation|Event|#\d+)/i)) {
-      // First section without opportunity marker is intro
-      intro = cleanText(section);
-      return;
-    }
-
-    // Parse fields for this opportunity
-    const parsed = parseKeyValues(section);
-    const fields = parsed.fields;
-    
-    if (fields.length > 0) {
-      opportunities.push({
-        id: index,
-        fields: fields
-      });
-    }
-  });
-
-  return { intro, opportunities };
+  // Remove ```json at the beginning
+  if (cleanedText.startsWith('```json')) {
+    cleanedText = cleanedText.substring(7);
+  } else if (cleanedText.startsWith('```')) {
+    cleanedText = cleanedText.substring(3);
+  }
+  
+  // Remove ``` at the end
+  if (cleanedText.endsWith('```')) {
+    cleanedText = cleanedText.substring(0, cleanedText.length - 3);
+  }
+  
+  return cleanedText.trim();
 }
 
-// Render assistant message as grouped opportunity tiles
-function AssistantTiles({ text }) {
-  const { intro, opportunities } = parseOpportunities(text);
-
-  if (opportunities.length === 0) {
-    // Fallback: use original parsing
-    const { intro: fallbackIntro, fields } = parseKeyValues(text);
+// Parse JSON text into structured data
+function parseJsonOpportunities(text = '') {
+  try {
+    const cleanedText = cleanJsonText(text);
+    const data = JSON.parse(cleanedText);
     
-    if (fields.length === 0) {
-      return (
-        <Card className="mb-2">
-          <Card.Body style={{ lineHeight: 1.45, whiteSpace: 'pre-line' }}>
-            {fallbackIntro || cleanText(text)}
+    const result = {
+      intro: data.Intro || '',
+      opportunities: []
+    };
+    
+    // Find all opportunity keys (Opportunity 1, Opportunity 2, etc.)
+    const opportunityKeys = Object.keys(data).filter(key => 
+      key.toLowerCase().startsWith('opportunity')
+    );
+    
+    opportunityKeys.forEach(key => {
+      const opportunity = data[key];
+      if (typeof opportunity === 'object' && opportunity !== null) {
+        const fields = Object.entries(opportunity).map(([fieldKey, fieldValue]) => ({
+          label: fieldKey,
+          value: String(fieldValue)
+        }));
+        
+        result.opportunities.push({
+          id: key,
+          fields: fields
+        });
+      }
+    });
+    
+    return result;
+  } catch (error) {
+    console.error('Error parsing JSON opportunities:', error);
+    // Fallback to empty result
+    return {
+      intro: '',
+      opportunities: []
+    };
+  }
+}
+
+// Render assistant message as JSON-based opportunity tiles
+function AssistantTiles({ text }) {
+  const { intro, opportunities } = parseJsonOpportunities(text);
+
+  return (
+    <div className="mb-2">
+      {/* Intro Container */}
+      {intro && (
+        <Card className="mb-3" style={{
+          border: '2px solid #d92929',
+          borderRadius: '12px',
+          backgroundColor: '#fff5f5'
+        }}>
+          <Card.Body style={{ 
+            lineHeight: 1.6, 
+            whiteSpace: 'pre-line',
+            fontSize: '1.1rem',
+            color: '#2c3e50'
+          }}>
+            {intro}
           </Card.Body>
         </Card>
-      );
-    }
+      )}
 
-    // Single opportunity fallback
-    return (
-      <div className="mb-2">
-        {fallbackIntro && (
-          <Card className="mb-2">
-            <Card.Body style={{ lineHeight: 1.45, whiteSpace: 'pre-line' }}>
-              {fallbackIntro}
-            </Card.Body>
-          </Card>
-        )}
-        <div className="opportunity-container" style={{
-          border: '1px solid #e0e0e0',
-          borderRadius: '8px',
-          padding: '16px',
-          marginBottom: '16px',
-          boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-          backgroundColor: '#fafafa'
+      {/* Opportunity Containers */}
+      {opportunities.map((opportunity) => (
+        <div key={opportunity.id} className="opportunity-container mb-4" style={{
+          border: '2px solid #e0e0e0',
+          borderRadius: '12px',
+          padding: '20px',
+          boxShadow: '0 6px 12px rgba(0,0,0,0.1)',
+          backgroundColor: '#ffffff'
         }}>
+          {/* Opportunity Header */}
           <div style={{
-            fontSize: '1.1rem',
+            fontSize: '1.3rem',
             fontWeight: 700,
-            color: '#333',
-            marginBottom: '12px',
-            paddingBottom: '8px',
-            borderBottom: '2px solid #007bff'
+            color: '#2c3e50',
+            marginBottom: '20px',
+            paddingBottom: '12px',
+            borderBottom: '3px solid #d92929',
+            textAlign: 'center'
           }}>
-            Opportunity #1
+            {opportunity.id}
           </div>
-          <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-2">
-            {fields.map((f, i) => (
-              <div className="col" key={`${f.label}-${i}`}>
-                <Card className="h-100">
-                  <Card.Body>
+          
+          {/* 8 Tiles Grid */}
+          <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
+            {opportunity.fields.map((field, fieldIndex) => (
+              <div className="col" key={`${field.label}-${fieldIndex}`}>
+                <Card className="h-100" style={{
+                  border: '1px solid #dee2e6',
+                  borderRadius: '8px',
+                  transition: 'transform 0.2s ease-in-out',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+                }}>
+                  <Card.Body style={{ padding: '16px' }}>
                     <div
                       style={{
-                        fontSize: '0.78rem',
+                        fontSize: '0.8rem',
                         fontWeight: 700,
-                        letterSpacing: '.02em',
+                        letterSpacing: '.03em',
                         textTransform: 'uppercase',
-                        color: '#6a6a6a',
-                        marginBottom: 6
+                        color: '#d92929',
+                        marginBottom: '8px',
+                        borderBottom: '1px solid #e9ecef',
+                        paddingBottom: '6px'
                       }}
                     >
-                      {f.label}
+                      {field.label}
                     </div>
-                    <div style={{ lineHeight: 1.45, color: '#1f1f1f', whiteSpace: 'pre-line' }}>
-                      {f.value}
+                    <div style={{ 
+                      lineHeight: 1.5, 
+                      color: '#495057', 
+                      whiteSpace: 'pre-line',
+                      fontSize: '0.9rem',
+                      minHeight: '40px',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}>
+                      {field.value}
                     </div>
                   </Card.Body>
                 </Card>
@@ -214,114 +173,20 @@ function AssistantTiles({ text }) {
             ))}
           </div>
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="mb-2">
-      {intro && (
+      ))}
+      
+      {/* Fallback for non-JSON text */}
+      {opportunities.length === 0 && (
         <Card className="mb-2">
           <Card.Body style={{ lineHeight: 1.45, whiteSpace: 'pre-line' }}>
-            {intro}
+            {text}
           </Card.Body>
         </Card>
       )}
-
-      {opportunities.map((opportunity, oppIndex) => {
-        // Separate explanation field from other fields
-        const explanationField = opportunity.fields.find(f => 
-          f.label.toLowerCase() === 'explanation'
-        );
-        const otherFields = opportunity.fields.filter(f => 
-          f.label.toLowerCase() !== 'explanation'
-        );
-        
-        return (
-          <div key={opportunity.id} className="opportunity-container" style={{
-            border: '1px solid #e0e0e0',
-            borderRadius: '8px',
-            padding: '16px',
-            marginBottom: '16px',
-            boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-            backgroundColor: '#fafafa'
-          }}>
-            <div style={{
-              fontSize: '1.1rem',
-              fontWeight: 700,
-              color: '#333',
-              marginBottom: '12px',
-              paddingBottom: '8px',
-              borderBottom: '2px solid #007bff'
-            }}>
-              Opportunity #{oppIndex + 1}
-            </div>
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-2">
-              {otherFields.map((f, i) => (
-                <div className="col" key={`${f.label}-${i}`}>
-                  <Card className="h-100">
-                    <Card.Body>
-                      <div
-                        style={{
-                          fontSize: '0.78rem',
-                          fontWeight: 700,
-                          letterSpacing: '.02em',
-                          textTransform: 'uppercase',
-                          color: '#6a6a6a',
-                          marginBottom: 6
-                        }}
-                      >
-                        {f.label}
-                      </div>
-                      <div style={{ lineHeight: 1.45, color: '#1f1f1f', whiteSpace: 'pre-line' }}>
-                        {f.value}
-                      </div>
-                    </Card.Body>
-                  </Card>
-                </div>
-              ))}
-            </div>
-            {explanationField && (
-              <div style={{
-                marginTop: '16px',
-                paddingTop: '12px',
-                borderTop: '1px solid #e0e0e0'
-              }}>
-                <div style={{
-                  fontSize: '0.9rem',
-                  fontWeight: 600,
-                  color: '#007bff',
-                  marginBottom: '8px'
-                }}>
-                  Why This Fits You:
-                </div>
-                <div style={{
-                  fontSize: '0.9rem',
-                  lineHeight: 1.5,
-                  color: '#555',
-                  fontStyle: 'italic'
-                }}>
-                  {explanationField.value}
-                </div>
-              </div>
-            )}
-            {/* Temporary debug display */}
-            <div style={{
-              marginTop: '8px',
-              padding: '8px',
-              backgroundColor: '#f0f0f0',
-              fontSize: '0.8rem',
-              color: '#666',
-              borderRadius: '4px'
-            }}>
-              Debug - Fields: {opportunity.fields.length}, Explanation: {explanationField ? 'Yes' : 'No'}
-            </div>
-          </div>
-        );
-      })}
     </div>
   );
 }
+
 /* ----------------- end helpers ----------------- */
 
 const OpportunityTab = () => {
@@ -344,7 +209,7 @@ const OpportunityTab = () => {
     try {
       const profileText = `The student's major is ${userProfile.major}. The student is interested in developing the following leadership skills: ${userProfile.leadershipSkills}. The student has the following big picture goals: ${userProfile.bigPictureGoals}. The student has already had the following experiences: ${userProfile.experiences}. The student's resume contains the following information: ${userProfile.resumeContent}`;
       const fullMessage = profileText
-        ? `Trimmed\n${trimmed}\n\nUser Profile: ${profileText}`
+        ? `${trimmed}\n\nUser Profile: ${profileText}`
         : trimmed;
 
       const data = await chatWithBot(fullMessage, OPPORTUNITY_SYSTEM_PROMPT);

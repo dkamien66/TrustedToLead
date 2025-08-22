@@ -91,7 +91,7 @@ events_path = _abs_path("mock_data/events.json")
 with open(events_path, "r", encoding="utf-8") as f:
     events = json.load(f)
 
-event_fields = ["event_title", "type", "dates", "description", "related_business_major(s)", "leadership_skill_developed"]
+event_fields = ["event_title", "type", "dates", "description", "related_business_major(s)", "leadership_skill_developed", "register & more details"]
 event_texts = [
     " | ".join(str(e.get(field, "")) for field in event_fields)
     for e in events
@@ -110,7 +110,7 @@ people_path = _abs_path("mock_data/people.json")
 with open(people_path, "r", encoding="utf-8") as f:
     people = json.load(f)
 
-people_fields = ["name", "role", "related_fields", "leadership_counseling"]
+people_fields = ["name", "role", "related_fields", "leadership_counseling", "email"]
 def _join_field(obj, field):
     val = obj.get(field, "")
     if isinstance(val, list):
@@ -140,6 +140,43 @@ def query_gemini_with_context(message: str, system_prompt: str = "") -> str:
             for e in retrieved
         ]
         context = "\n".join(context_lines)
+        prompt = f"""
+        Return a json object of json objects as your answer.
+        For example, follow this flow:
+        Question: You are an opportunity curator. This is the given context: Summer Internship Search Strategy Session | Application Event / Workshop | Tuesday, May 20, 2026 (4:00 PM - 5:30 PM) | Geared towards rising sophomores and juniors, this session by the Business Career Center provides essential strategies for launching a successful summer 2027 internship search. Topics include identifying target industries, crafting compelling applications, leveraging career fairs, and interview preparation. | All Business Majors | Goal Setting, Planning, Initiative | https://events.wisc.edu/register/summer-internship-search-strategy-session-77724
+"Marketing Your Story" Personal Branding Workshop | Workshop | Saturday, October 4, 2025 (10:00 AM - 1:00 PM) | Led by a professional development consultant from the Business Career Center, this interactive workshop helps students define their personal brand and effectively communicate their unique value proposition for internships and job applications. Activities include group exercises, resume review tips, and LinkedIn profile optimization strategies. | Marketing, Management & Human Resources (applicable to all) | Communication (Self-Promotion), Strategic Thinking | https://events.wisc.edu/register/marketing-your-story-personal-branding-workshop-77724
+        Answer: {{
+            "Intro": "Based on your profile as a Human Resources and Management major interested in developing communication skills and preparing for internships, I recommend the following opportunities:"
+            "Opportunity 1": {{
+                "Title": "Summer Internship Search Strategy Session",
+                "Type": "Application Event / Workshop",
+                "Dates": "Tuesday, May 20, 2026 (4:00 PM - 5:30 PM)",
+                "Description": "This session provides essential strategies for launching a successful summer 2027 internship search. Topics include identifying target industries, crafting compelling applications, leveraging career fairs, and interview preparation.",
+                "Related Business Majors": "All Business Majors (including Human Resources and Management)",
+                "Leadership Skills Developed": "Goal Setting, Planning, Initiative",
+		        “Register & More Details”: “https://events.wisc.edu/register/summer-internship-search-strategy-session-77724”,
+                "Explanation": "This workshop directly addresses your goal of preparing for an internship.  The skills developed (goal setting, planning, and initiative) are highly valuable for internship applications and success. While it doesn't focus specifically on communication, strong planning and initiative are foundational to effective communication in a professional setting."
+            }},
+            "Opportunity 2": {{
+                "Title": "\"Marketing Your Story\" Personal Branding Workshop",
+                "Type": "Workshop",
+                "Dates": "Saturday, October 4, 2025 (10:00 AM - 1:00 PM)",
+                "Description": "This interactive workshop helps students define their personal brand and effectively communicate their unique value proposition for internships and job applications. Activities include group exercises, resume review tips, and LinkedIn profile optimization strategies.",
+                "Related Business Majors": "Marketing, Management & Human Resources (applicable to all)",  
+                "Leadership Skills Developed": "Communication (Self-Promotion), Strategic Thinking",
+		        “Register & More Details”: “https://events.wisc.edu/register/marketing-your-story-personal-branding-workshop-77724”
+                "Explanation": "This workshop directly addresses your interest in developing communication skills, specifically focusing on self-promotion – a crucial aspect of securing internships.  The focus on personal branding and resume/LinkedIn optimization will significantly improve your application materials.  The strategic thinking component will further enhance your professional skill set."
+            }}
+        }}
+
+        Question: {system_prompt}
+        \nHere is the relevant context information you are to use in your response. Context: {context}
+        \nThis is what the user is requesting: {message}
+        If the user request contains information that they have already experienced an event that is
+        also in the context or they have already spoken with someone that is also in the context, do not
+        include that event or person again in your recommendation response.
+        Answer:
+    """
 
     elif "network curator" in system_prompt:
         retrieved = retrieve_people(message)
@@ -149,6 +186,39 @@ def query_gemini_with_context(message: str, system_prompt: str = "") -> str:
             for p in retrieved
         ]
         context = "\n".join(context_lines)
+        prompt = f"""
+        Return a json object of json objects as your answer.
+            For example, follow this flow:
+            Question: You are a network curator. This is the given context: Emily Cox | Faculty | Accounting, Business Law, Taxation | Accountability, Ethical Leadership, Attention to Detail, Problem Solving | emily.cox@businessuni.edu
+    Scarlett Hill | Advisor | Accounting, Business Law | Ethical Leadership, Accountability, Attention to Detail | scarlett.hill@leadingedge.edu
+        Answer: {{
+            “Intro”: “Based on your profile as an Accounting major interested in developing problem solving skills, I recommend connecting with the following individuals:”
+            “Contact 1”: {{
+                “Name”: “Emily Cox”,
+                “Role”: “Faculty”,
+                “Related Fields”: “Accounting, Business Law, Taxation”,
+                “Leadership Counseling”: “Accountability, Ethical Leadership, Attention to Detail, Problem Solving”,
+                “Email”: “emily.cox@businessuni.edu”
+                "Explanation": "As a faculty member specializing in Account, Emily Cox can offer tailored advice on building your problem solving skills for your future career. Their expertise in mentorship and coaching for growth will be particularly beneficial in helping you develop and refine your problem solving skills abilities within a professional context. They can provide guidance on networking, interviewing, and overall career planning within the Accounting field."
+            }},
+            “Contact 2”: {{
+                “Name”: “Scarlett Hill”,
+                “Role”: “Advisor”,
+                “Related Fields”: “Accounting, Business Law”,
+                “Leadership Counseling”: “Ethical Leadership, Accountability, Attention to Detail”,
+                “Email”: “scarlett.hill@leadingedge.edu”
+                "Explanation": “Scarlet’s guidance as an advisor can also be helpful. Speak with her about attention to detail within accounting and to learn about ethical leadership in a professional context”
+            }}
+        }}
+
+        Question: {system_prompt}
+        \nHere is the relevant context information you are to use in your response. Context: {context}
+        \nThis is what the user is requesting: {message}
+        If the user request contains information that they have already experienced an event that is
+        also in the context or they have already spoken with someone that is also in the context, do not
+        include that event or person again in your recommendation response.
+        Answer:
+    """
 
     else:  # plan curator (default)
         plan_events = retrieve_events(message, top_k=5)
@@ -162,9 +232,7 @@ def query_gemini_with_context(message: str, system_prompt: str = "") -> str:
             for p in plan_people
         )
         context = f"Opportunities to go to:\n{events_block}\n\nPeople to talk to:\n{people_block}"
-
-    prompt = f"""
-        {system_prompt}
+        prompt = f"""{system_prompt}
         \nHere is the relevant context information you are to use in your response. Context: {context}
         \nThis is what the user is requesting: {message}
         If the user request contains information that they have already experienced an event that is
@@ -172,6 +240,7 @@ def query_gemini_with_context(message: str, system_prompt: str = "") -> str:
         include that event or person again in your recommendation response.
     """
 
+    print(prompt)
     try:
         resp = gemini_model.generate_content(prompt)
         return getattr(resp, "text", "").strip() or "[No text returned]"

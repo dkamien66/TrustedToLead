@@ -1,11 +1,11 @@
 // src/components/Profile/Profile.jsx
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
 import { useAppContext } from '../../context/AppContext';
 import './Profile.css';
 
 const Profile = () => {
-  const { userProfile, saveProfile, isAdmin } = useAppContext();
+  const { userProfile, saveProfile } = useAppContext();
   const [p_major, setMajor] = useState(userProfile.major || '');
   const [p_leadershipSkills, setLeadershipSkills] = useState(userProfile.leadershipSkills || '');
   const [p_bigPictureGoals, setBigPictureGoals] = useState(userProfile.bigPictureGoals || '');
@@ -151,6 +151,23 @@ const Profile = () => {
               </Alert>
             )}
           </Form>
+        </Card.Body>
+      </Card>
+
+      {/* Experience Container */}
+      <Card className="profile-card mt-4">
+        <Card.Header as="h5">Experience</Card.Header>
+        <Card.Body>
+          <Card.Title>Find New Experiences</Card.Title>
+          <p className="text-muted">
+            Discover opportunities to develop your leadership skills and achieve your goals.
+          </p>
+          <Button 
+            variant="outline-primary" 
+            size="lg"
+          >
+            Find Experience
+          </Button>
         </Card.Body>
       </Card>
     </div>
